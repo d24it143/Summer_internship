@@ -8,8 +8,6 @@ import * as path from 'path';
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.json());
-
 const utf8Decoder = new TextDecoder();
 
 // Base directories for crypto material from the Fabric test-network
@@ -18,6 +16,9 @@ const CRYPTO_PATH = path.resolve(WORKSPACE_DIR, 'fabric-samples/test-network/org
 const CERT_PATH = path.resolve(CRYPTO_PATH, 'users/User1@org1.example.com/msp/signcerts/cert.pem');
 const KEY_DIR_PATH = path.resolve(CRYPTO_PATH, 'users/User1@org1.example.com/msp/keystore');
 const TLS_CERT_PATH = path.resolve(CRYPTO_PATH, 'peers/peer0.org1.example.com/tls/ca.crt');
+
+app.use(express.json());
+app.use(express.static(path.resolve(WORKSPACE_DIR, 'banking-client/public')));
 
 const PEER_ENDPOINT = 'localhost:7051';
 const PEER_HOST_ALIAS = 'peer0.org1.example.com';
