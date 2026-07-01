@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Go dependencies
+/banking-chaincode/vendor/
+
+# Local configuration & state
+fabric-samples/
+*.tar.gz
+report.html
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store

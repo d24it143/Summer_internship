@@ -1,0 +1,37 @@
+test:
+  name: banking-chaincode-benchmark
+  description: Benchmark for Hyperledger Fabric banking chaincode
+  workers:
+    type: local
+    number: 2
+  rounds:
+    - label: Seed Accounts (Warmup)
+      txNumber: 20
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 5
+      workload:
+        module: benchmarks/transferWorkload.js
+        arguments:
+          action: create
+    - label: Transfer Funds (Stress Test)
+      txDuration: 15
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 10
+      workload:
+        module: benchmarks/transferWorkload.js
+        arguments:
+          action: transfer
+    - label: Query Accounts (Read Stress)
+      txDuration: 15
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 20
+      workload:
+        module: benchmarks/transferWorkload.js
+        arguments:
+          action: query

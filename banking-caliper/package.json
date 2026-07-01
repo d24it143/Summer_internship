@@ -1,0 +1,14 @@
+{
+  "name": "banking-caliper",
+  "version": "1.0.0",
+  "description": "Hyperledger Caliper Benchmark for banking chaincode",
+  "scripts": {
+    "bind": "npx caliper bind --caliper-bind-sut fabric:2.2",
+    "benchmark": "npx caliper launch manager --caliper-workspace ./ --caliper-networkconfig networks/networkConfig.yaml --caliper-benchconfig benchmarks/config.yaml --caliper-flow-only-test"
+  },
+  "dependencies": {
+    "@hyperledger/caliper-cli": "0.5.0",
+    "@hyperledger/caliper-fabric": "0.5.0",
+    "fabric-network": "^2.2.12"
+  }
+}
