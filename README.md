@@ -187,8 +187,3 @@ When evaluating the performance results from **20** to **100,000** transactions,
     Queries scaled perfectly with the send rate, reaching **500.0 TPS** at 100,000 transactions with **0.00s (sub-millisecond)** average latency and **100% success**. Since queries do not update the world state, they bypass ordering validation and run entirely local checks on the peer databases with zero lock contention.
 
 ---
-
-## 📜 Generated PDF Comparison Report
-
-A styled PDF version of the comparison analysis has been compiled:
-*   [Caliper Benchmark Comparison Report (PDF)](file:///Users/dhavalvarvariya/Downloads/CHARUSAT/D/caliper_benchmark_comparison_report.pdf)
