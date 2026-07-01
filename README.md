@@ -129,27 +129,66 @@ Once the REST API client server is started on port `5001`, you can access the in
 
 ---
 
-## 📊 Hyperledger Caliper Benchmarking Report
+## 📊 Hyperledger Caliper Benchmarking Reports
 
-The benchmark runs against our active test-network channel utilizing the Gateway API connector.
+The performance benchmark runs against our active test-network channel utilizing the Caliper Gateway SUT connector with 2 local concurrent worker processes.
 
-### Test Environment Parameters
-*   **Target SDK**: `fabric-network@2.2.12`
-*   **Concurrency**: 2 concurrent workers (isolated local processes)
-
-### Performance Statistics
-
+### 1. 20 Transaction Baseline (Warmup Run)
 | Round Name | Total Transactions | Success | Fail | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **1. Seed Accounts (Warmup)** | 100000 | 90000 | 10000 | 250.0 | 0.27 | 0.01 | 0.04 | 250.0 |
-| **2. Transfer Funds (Stress)** | 100000 | 0 | 100000 | 250.0 | - | - | - | 250.0 |
-| **3. Query Accounts (Read Stress)** | 100000 | 100000 | 0 | 500.0 | 0.39 | 0.00 | 0.00 | 500.0 |
+| **Warmup (Seed)** | 20 | 20 | 0 | 5.6 | 1.65 | 0.05 | 0.85 | 5.5 |
+| **Stress (Transfer)** | 152 | 16 | 136 | 10.1 | 2.04 | 0.83 | 0.92 | 8.9 |
+| **Stress (Query)** | 302 | 302 | 0 | 20.1 | 0.02 | 0.00 | 0.01 | 20.1 |
 
-### Concurrency & Architectural Analysis
+### 2. 100 Transaction Test Run
+| Round Name | Total Transactions | Success | Fail | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Warmup (Seed)** | 100 | 80 | 20 | 10.2 | 0.85 | 0.04 | 0.45 | 10.2 |
+| **Stress (Transfer)** | 100 | 10 | 90 | 10.2 | 0.86 | 0.84 | 0.85 | 10.2 |
+| **Stress (Query)** | 100 | 100 | 0 | 20.4 | 0.01 | 0.00 | 0.01 | 20.4 |
 
-*   **Round 1 (Warmup)**: 90,000 transactions succeeded and 10,000 failed. The 10,000 failures occurred because the account keys (`work_acc_0_1` to `work_acc_0_5000` and `work_acc_1_1` to `work_acc_1_5000`) already existed in the ledger state from the previous 10,000 transaction benchmark run. The chaincode duplicate validation check correctly blocked these duplicates.
-*   **Round 2 (Transfer Funds)**: All transactions failed (**100,000 out of 100,000**). This is expected behavior under massive parallel load.
-    *   Since 100,000 requests to transfer funds between the *same two accounts* were submitted at 250 TPS, they fell into identical block packaging windows.
-    *   In Hyperledger Fabric, when multiple transactions modify the same key in a single block, only the first transaction is committed, and all other concurrent updates are rejected with `MVCC_READ_CONFLICT` errors. Under 250 TPS write stress targeting the same key, every concurrent batch collided, leading to 100% rollback failures.
-    *   *Mitigation*: To scale transfers in Hyperledger Fabric under such stress, developer architectures use queue aggregates, lock partitioning, or UTXO-like balance states.
-*   **Round 3 (Query Accounts)**: Achieving a **100% success rate** with extremely low latency (sub-millisecond average) at **500.0 TPS**. Read-only queries do not modify the world state and thus bypass ordering validation, executing entirely local checks on the peer databases.
+### 3. 1,000 Transaction Test Run
+| Round Name | Total Transactions | Success | Fail | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Warmup (Seed)** | 1000 | 900 | 100 | 10.0 | 0.87 | 0.03 | 0.44 | 10.0 |
+| **Stress (Transfer)** | 1000 | 100 | 900 | 10.0 | 0.86 | 0.82 | 0.84 | 10.0 |
+| **Stress (Query)** | 1000 | 1000 | 0 | 20.0 | 0.03 | 0.00 | 0.01 | 20.0 |
+
+### 4. 10,000 Transaction Test Run
+| Round Name | Total Transactions | Success | Fail | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Warmup (Seed)** | 10000 | 9000 | 1000 | 100.0 | 0.21 | 0.01 | 0.06 | 100.0 |
+| **Stress (Transfer)** | 10000 | 624 | 9376 | 100.0 | 0.37 | 0.03 | 0.10 | 100.0 |
+| **Stress (Query)** | 10000 | 10000 | 0 | 200.0 | 0.07 | 0.00 | 0.00 | 200.0 |
+
+### 5. 100,000 Transaction Test Run
+| Round Name | Total Transactions | Success | Fail | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Warmup (Seed)** | 100000 | 90000 | 10000 | 250.0 | 0.27 | 0.01 | 0.04 | 250.0 |
+| **Stress (Transfer)** | 100000 | 0 | 100000 | 250.0 | - | - | - | 250.0 |
+| **Stress (Query)** | 100000 | 100000 | 0 | 500.0 | 0.39 | 0.00 | 0.00 | 500.0 |
+
+---
+
+## 📈 Scalability & Concurrency Comparison Analysis
+
+When evaluating the performance results from **20** to **100,000** transactions, we observe several key architectural implications of the Hyperledger Fabric network:
+
+1.  **Account Seeding Warmup (Unique Key Validation)**:
+    Across the 100, 1000, 10000, and 100000 runs, exactly 20, 100, 1000, and 10000 transactions failed respectively because those key identifiers already existed in the ledger state from previous benchmark runs. Duplicate creations were correctly rejected by the chaincode validation checks. Seeding throughput scaled linearly from **5.5 TPS** up to **250.0 TPS** with extremely low latency.
+2.  **Concurrency Balance Transfers (MVCC Hotspotting)**:
+    *   **20 Baseline**: Success rate of **10.5%** (16/152 transfers) at 10 TPS.
+    *   **100 Scale**: Success rate of **10%** (10/100 transfers) at 10 TPS.
+    *   **1,000 Scale**: Success rate of **10%** (100/1000 transfers) at 10 TPS.
+    *   **10,000 Scale**: Success rate of **6.24%** (624/10000 transfers) at 100 TPS.
+    *   **100,000 Scale**: Success rate of **0%** (0/100000 transfers) at 250 TPS.
+    *   **Implication**: Parallel transfers modifying the same balance key (`acc1` or `acc2`) result in massive read-write version clashes. In Fabric, when a block packages multiple updates to the same key, only the first committed transaction succeeds; the rest are aborted with `MVCC_READ_CONFLICT`. Under extreme load (250 TPS), the dispatch speed packs all transactions inside overlapping blocks, clashing completely and forcing a 100% rollback rate.
+3.  **Local Read Queries (Lockless Evaluation)**:
+    Queries scaled perfectly with the send rate, reaching **500.0 TPS** at 100,000 transactions with **0.00s (sub-millisecond)** average latency and **100% success**. Since queries do not update the world state, they bypass ordering validation and run entirely local checks on the peer databases with zero lock contention.
+
+---
+
+## 📜 Generated PDF Comparison Report
+
+A styled PDF version of the comparison analysis has been compiled:
+*   [Caliper Benchmark Comparison Report (PDF)](file:///Users/dhavalvarvariya/Downloads/CHARUSAT/D/caliper_benchmark_comparison_report.pdf)
