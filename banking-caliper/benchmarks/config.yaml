@@ -6,31 +6,31 @@ test:
     number: 2
   rounds:
     - label: Seed Accounts (Warmup)
-      txNumber: 10000
+      txNumber: 100000
       rateControl:
         type: fixed-rate
         opts:
-          tps: 100
+          tps: 250
       workload:
         module: benchmarks/transferWorkload.js
         arguments:
           action: create
     - label: Transfer Funds (Stress Test)
-      txNumber: 10000
+      txNumber: 100000
       rateControl:
         type: fixed-rate
         opts:
-          tps: 100
+          tps: 250
       workload:
         module: benchmarks/transferWorkload.js
         arguments:
           action: transfer
     - label: Query Accounts (Read Stress)
-      txNumber: 10000
+      txNumber: 100000
       rateControl:
         type: fixed-rate
         opts:
-          tps: 200
+          tps: 500
       workload:
         module: benchmarks/transferWorkload.js
         arguments:
