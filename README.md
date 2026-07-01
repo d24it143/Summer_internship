@@ -141,15 +141,15 @@ The benchmark runs against our active test-network channel utilizing the Gateway
 
 | Round Name | Total Transactions | Success | Fail | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **1. Seed Accounts (Warmup)** | 20 | 20 | 0 | 5.6 | 1.65 | 0.05 | 0.85 | 5.5 |
-| **2. Transfer Funds (Stress)** | 152 | 16 | 136 | 10.1 | 2.04 | 0.83 | 0.92 | 8.9 |
-| **3. Query Accounts (Read Stress)** | 302 | 302 | 0 | 20.1 | 0.02 | 0.00 | 0.01 | 20.1 |
+| **1. Seed Accounts (Warmup)** | 100 | 80 | 20 | 10.2 | 0.85 | 0.04 | 0.45 | 10.2 |
+| **2. Transfer Funds (Stress)** | 100 | 10 | 90 | 10.2 | 0.86 | 0.84 | 0.85 | 10.2 |
+| **3. Query Accounts (Read Stress)** | 100 | 100 | 0 | 20.4 | 0.01 | 0.00 | 0.01 | 20.4 |
 
 ### Concurrency & Architectural Analysis
 
-*   **Round 1 (Warmup)**: High success rates are observed because each thread writes distinct unique keys (`work_acc_0_1`, `work_acc_1_1`, etc.), causing zero storage level locking collisions.
-*   **Round 2 (Transfer Funds)**: A significant portion of transactions failed (**136 out of 152**). This is expected behaviour showing Hyperledger Fabric's **Multi-Version Concurrency Control (MVCC)** mechanism under stress. 
+*   **Round 1 (Warmup)**: 80 transactions succeeded and 20 failed. The 20 failures occurred because the account keys (`work_acc_0_1` to `work_acc_0_10` and `work_acc_1_1` to `work_acc_1_10`) already existed in the ledger state from the previous benchmark run. The chaincode's duplicate validation check correctly rejected these duplicate accounts.
+*   **Round 2 (Transfer Funds)**: A significant portion of transactions failed (**90 out of 100**). This is expected behavior showing Hyperledger Fabric's **Multi-Version Concurrency Control (MVCC)** mechanism under stress. 
     *   Since parallel threads are updating the *same keys* (`acc1` and `acc2`) simultaneously, they execute against the same world state version.
     *   When these transactions reach peer validation, only the first committed write in the block completes; subsequent concurrent updates are flagged as invalid due to reading stale keys (`MVCC_READ_CONFLICT`).
     *   *Mitigation*: To scale transfer transactions in Hyperledger Fabric, developers utilize transaction scheduling queues, balance grouping, or a UTXO-based ledger design.
-*   **Round 3 (Query Accounts)**: Achieving a **100% success rate** with extremely low latency (10ms) at 20 TPS. Read-only queries do not modify the world state and thus bypass ordering validation, executing entirely local checks on the peer databases.
+*   **Round 3 (Query Accounts)**: Achieving a **100% success rate** with extremely low latency (10ms) at 20.4 TPS. Read-only queries do not modify the world state and thus bypass ordering validation, executing entirely local checks on the peer databases.
