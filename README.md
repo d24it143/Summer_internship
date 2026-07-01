@@ -116,6 +116,19 @@ curl -i -s -X POST -H "Content-Type: application/json" \
 
 ---
 
+## 💻 Web Dashboard UI Portal
+
+Once the REST API client server is started on port `5001`, you can access the interactive Web Dashboard directly in your web browser:
+
+1.  Open your browser and navigate to: **`http://localhost:5001`**
+2.  The portal features:
+    *   **Live Ledgers Board**: View accounts list, owner names, and balances updated in real-time.
+    *   **Interactive Transfer Panel**: A client interface to perform fund transfers instantly.
+    *   **MVCC Stress Test Switch**: Toggle parallel execution submissions to dynamically trigger and verify `MVCC_READ_CONFLICT` validations.
+    *   **Event & Ledger Stream**: A console monitoring all outgoing transactions, responses, latency, and detailed validation failures.
+
+---
+
 ## 📊 Hyperledger Caliper Benchmarking Report
 
 The benchmark runs against our active test-network channel utilizing the Gateway API connector.
