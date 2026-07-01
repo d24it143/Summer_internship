@@ -6,7 +6,7 @@ test:
     number: 2
   rounds:
     - label: Seed Accounts (Warmup)
-      txNumber: 100
+      txNumber: 1000
       rateControl:
         type: fixed-rate
         opts:
@@ -16,7 +16,7 @@ test:
         arguments:
           action: create
     - label: Transfer Funds (Stress Test)
-      txNumber: 100
+      txNumber: 1000
       rateControl:
         type: fixed-rate
         opts:
@@ -26,7 +26,7 @@ test:
         arguments:
           action: transfer
     - label: Query Accounts (Read Stress)
-      txNumber: 100
+      txNumber: 1000
       rateControl:
         type: fixed-rate
         opts:
