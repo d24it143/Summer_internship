@@ -15,9 +15,9 @@ organizations:
       certificates:
         - name: User1
           clientPrivateKey:
-            path: /Users/dhavalvarvariya/Downloads/CHARUSAT/D/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/4d08689c95d59fb566b0831d97363f125ab3370f082fff2c4bff441b868df52b_sk
+            path: E:/Summer_internship/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/3571f4eed65028c7c16cb29da9eb667cfd84f4332a33688a7bcde7f028536d30_sk
           clientSignedCert:
-            path: /Users/dhavalvarvariya/Downloads/CHARUSAT/D/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/cert.pem
+            path: E:/Summer_internship/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/cert.pem
     connectionProfile:
-      path: /Users/dhavalvarvariya/Downloads/CHARUSAT/D/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.yaml
+      path: E:/Summer_internship/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.yaml
       discover: true

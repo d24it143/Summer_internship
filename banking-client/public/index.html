@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SecureBank Ledger — Fabric Portal</title>
-  
+
   <!-- Modern Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
   <style>
     :root {
-      --bg-color: #0b0f19;
-      --card-bg: rgba(17, 24, 39, 0.65);
+      --bg-color: #080c14;
+      --card-bg: rgba(15, 23, 42, 0.65);
       --card-border: rgba(255, 255, 255, 0.08);
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
       --primary: #6366f1;
       --primary-hover: #4f46e5;
       --primary-glow: rgba(99, 102, 241, 0.15);
@@ -24,7 +27,8 @@
       --success-glow: rgba(16, 185, 129, 0.15);
       --error: #ef4444;
       --error-glow: rgba(239, 68, 68, 0.15);
-      --terminal-bg: #030712;
+      --terminal-bg: #020617;
+      --accent: #f59e0b;
     }
 
     * {
@@ -40,18 +44,19 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.04) 0%, transparent 40%);
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.02) 0%, transparent 60%);
       overflow-x: hidden;
     }
 
     /* Container & Header */
     header {
-      padding: 1.5rem 2rem;
+      padding: 1.25rem 2rem;
       border-bottom: 1px solid var(--card-border);
-      backdrop-filter: blur(10px);
-      background-color: rgba(11, 15, 25, 0.5);
+      backdrop-filter: blur(12px);
+      background-color: rgba(8, 12, 20, 0.7);
       position: sticky;
       top: 0;
       z-index: 10;
@@ -82,9 +87,9 @@
 
     .brand-title {
       font-size: 1.5rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: -0.025em;
-      background: linear-gradient(to right, #ffffff, #9ca3af);
+      background: linear-gradient(to right, #ffffff, #cbd5e1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -94,12 +99,12 @@
       align-items: center;
       gap: 0.5rem;
       font-size: 0.85rem;
-      background: rgba(16, 185, 129, 0.1);
+      background: rgba(16, 185, 129, 0.08);
       border: 1px solid rgba(16, 185, 129, 0.2);
       color: var(--success);
       padding: 0.35rem 0.75rem;
       border-radius: 9999px;
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .status-dot {
@@ -112,29 +117,104 @@
     }
 
     @keyframes pulse {
-      0% { transform: scale(0.9); opacity: 0.6; }
-      50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px var(--success); }
-      100% { transform: scale(0.9); opacity: 0.6; }
+      0% {
+        transform: scale(0.9);
+        opacity: 0.6;
+      }
+
+      50% {
+        transform: scale(1.2);
+        opacity: 1;
+        box-shadow: 0 0 12px var(--success);
+      }
+
+      100% {
+        transform: scale(0.9);
+        opacity: 0.6;
+      }
     }
 
+    /* Main Container Grid */
     main {
       flex: 1;
       padding: 2rem;
-      max-width: 1300px;
+      max-width: 1400px;
       width: 100%;
       margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* Stats Board Styling */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stat-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+      transform: translate(20px, 20px);
+    }
+
+    .stat-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.025em;
+      transition: all 0.5s ease-out;
+    }
+
+    /* Content Layout */
+    .dashboard-layout {
       display: grid;
       grid-template-columns: 1.6fr 1fr;
       gap: 2rem;
     }
 
-    @media (max-width: 968px) {
-      main {
+    @media (max-width: 1024px) {
+      .dashboard-layout {
         grid-template-columns: 1fr;
       }
     }
 
-    /* Common Card Styling */
+    /* Card Styling */
     .card {
       background-color: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -148,7 +228,7 @@
     }
 
     .card-title {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 600;
       color: white;
       display: flex;
@@ -158,13 +238,7 @@
       padding-bottom: 0.75rem;
     }
 
-    /* Accounts Column */
-    .accounts-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
+    /* Refresh Button & Actions */
     .btn-refresh {
       background: transparent;
       border: 1px solid var(--card-border);
@@ -195,22 +269,27 @@
       transform: rotate(360deg);
     }
 
+    /* Premium Credit Card Grid & Design */
     .accounts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.25rem;
       min-height: 100px;
     }
 
     .account-card {
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.4));
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1.25rem;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.5rem;
+      height: 170px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       overflow: hidden;
       cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
     .account-card::before {
@@ -218,65 +297,106 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 4px;
+      width: 100%;
       height: 100%;
-      background: var(--primary);
-      opacity: 0.6;
-      transition: opacity 0.2s;
+      background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.12) 0%, transparent 60%);
+      z-index: 1;
     }
 
     .account-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(99, 102, 241, 0.3);
-      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.08);
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.6));
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35), 0 0 20px rgba(99, 102, 241, 0.15);
+      border-color: rgba(255, 255, 255, 0.25);
     }
 
-    .account-card:hover::before {
-      opacity: 1;
-      background: linear-gradient(to bottom, var(--primary), var(--success));
-    }
-
-    .acc-header {
+    .card-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.5rem;
+      z-index: 2;
+    }
+
+    .card-chip-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-chip {
+      width: 32px;
+      height: 24px;
+      background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+      border-radius: 4px;
+      position: relative;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
+
+    .card-chip::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 20%;
+      right: 20%;
+      bottom: 20%;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 2px;
+    }
+
+    .card-logo {
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      opacity: 0.85;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .acc-balance {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      margin-top: 1rem;
+      letter-spacing: -0.03em;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: baseline;
+      z-index: 2;
+    }
+
+    .acc-currency {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-left: 0.35rem;
+      font-weight: 500;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      z-index: 2;
+    }
+
+    .acc-owner {
+      font-weight: 600;
+      color: white;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
     }
 
     .acc-id {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-      color: var(--text-muted);
+      font-size: 0.75rem;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      letter-spacing: 0.05em;
     }
 
-    .acc-owner {
-      font-weight: 500;
-      color: var(--text-main);
-      font-size: 1.05rem;
-    }
-
-    .acc-balance {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: white;
-      margin-top: 0.5rem;
-      letter-spacing: -0.025em;
-      display: flex;
-      align-items: baseline;
-    }
-
-    .acc-currency {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-left: 0.25rem;
-      font-weight: 400;
-    }
-
-    /* Form Fields */
+    /* Forms */
     .form-group {
       display: flex;
       flex-direction: column;
@@ -284,41 +404,42 @@
     }
 
     label {
-      font-size: 0.85rem;
-      font-weight: 500;
+      font-size: 0.8rem;
+      font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.075em;
     }
 
-    select, input {
-      background-color: rgba(3, 7, 18, 0.6);
+    select,
+    input {
+      background-color: rgba(2, 6, 23, 0.75);
       border: 1px solid var(--card-border);
-      border-radius: 8px;
+      border-radius: 10px;
       color: white;
-      padding: 0.75rem 1rem;
+      padding: 0.8rem 1rem;
       font-family: 'Outfit', sans-serif;
-      font-size: 1rem;
-      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
       width: 100%;
       outline: none;
     }
 
-    select:focus, input:focus {
+    select:focus,
+    input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
-      background-color: rgba(3, 7, 18, 0.8);
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+      background-color: rgba(2, 6, 23, 0.9);
     }
 
-    /* Button */
     .btn-submit {
       background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       border: none;
       color: white;
       padding: 0.9rem 1.5rem;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -343,14 +464,14 @@
       box-shadow: none;
     }
 
-    /* Concurrency Switch */
+    /* Switch Option */
     .switch-container {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.02);
       padding: 0.75rem;
-      border-radius: 8px;
+      border-radius: 10px;
       border: 1px solid var(--card-border);
     }
 
@@ -392,16 +513,16 @@
       border-radius: 50%;
     }
 
-    input:checked + .slider {
+    input:checked+.slider {
       background-color: var(--primary);
     }
 
-    input:checked + .slider:before {
+    input:checked+.slider:before {
       transform: translateX(20px);
     }
 
     .switch-label-title {
-      font-weight: 500;
+      font-weight: 600;
       font-size: 0.9rem;
       color: white;
     }
@@ -411,24 +532,82 @@
       color: var(--text-muted);
     }
 
-    /* Bottom Terminal Section */
-    .terminal-card {
-      grid-column: 1 / -1;
+    /* Session Audit Ledger Table */
+    .ledger-table-container {
+      max-height: 280px;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      background: rgba(2, 6, 23, 0.4);
     }
 
+    .ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+
+    .ledger-table th {
+      padding: 0.75rem 1rem;
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .ledger-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+    }
+
+    .ledger-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .badge-failed {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--error);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    /* Console Terminal Section */
     .terminal {
       background-color: var(--terminal-bg);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
       font-family: 'JetBrains Mono', monospace;
-      padding: 1rem;
+      padding: 1.25rem;
       height: 180px;
       overflow-y: auto;
-      font-size: 0.85rem;
-      line-height: 1.5;
+      font-size: 0.82rem;
+      line-height: 1.6;
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.35rem;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
     }
 
     .term-line {
@@ -448,7 +627,7 @@
     }
 
     .term-info {
-      color: var(--text-main);
+      color: var(--text-muted);
     }
 
     .term-success {
@@ -461,23 +640,23 @@
       font-weight: 500;
     }
 
-    /* Alert and notifications */
+    /* Notification Alerts */
     .toast {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      background-color: var(--card-bg);
+      background-color: rgba(15, 23, 42, 0.9);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 1rem 1.5rem;
+      padding: 1.1rem 1.6rem;
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(15px);
       z-index: 100;
       transform: translateY(150%);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .toast.show {
@@ -492,22 +671,27 @@
       border-left: 4px solid var(--error);
     }
 
-    /* Loading indicator inside button */
     .spinner {
       border: 2px solid rgba(255, 255, 255, 0.1);
       border-top: 2px solid white;
       border-radius: 50%;
-      width: 1rem;
-      height: 1rem;
+      width: 1.1rem;
+      height: 1.1rem;
       animation: spin 0.8s linear infinite;
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </head>
+
 <body>
 
   <header>
@@ -522,67 +706,169 @@
   </header>
 
   <main>
-    <!-- Left Column: Accounts list -->
-    <div class="card">
-      <div class="card-title">
-        <span class="accounts-header">Active Ledgers</span>
-        <button id="refreshBtn" class="btn-refresh" title="Refresh Accounts">
-          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="23 4 23 10 17 10"></polyline>
-            <polyline points="1 20 1 14 7 14"></polyline>
-            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-          </svg>
-        </button>
+    <!-- Top Stats Board -->
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-title">Active Ledgers</div>
+        <div id="statTotalAccounts" class="stat-value">0</div>
       </div>
-      
-      <div id="accountsGrid" class="accounts-grid">
-        <!-- Rendered dynamically -->
+      <div class="stat-card">
+        <div class="stat-title">Total Vault Assets</div>
+        <div id="statTotalVault" class="stat-value">$0.00</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Average Ledger Value</div>
+        <div id="statAverageBalance" class="stat-value">$0.00</div>
       </div>
     </div>
 
-    <!-- Right Column: Transfer form -->
-    <div class="card">
-      <div class="card-title">Execute Transfer</div>
-      
-      <form id="transferForm" class="card" style="padding:0; background:none; border:none; box-shadow:none; backdrop-filter:none;">
-        <div class="form-group">
-          <label for="senderSelect">Sender Account</label>
-          <select id="senderSelect" required>
-            <option value="" disabled selected>Select Sender</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="receiverSelect">Receiver Account</label>
-          <select id="receiverSelect" required>
-            <option value="" disabled selected>Select Receiver</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="amountInput">Amount (USD)</label>
-          <input type="number" id="amountInput" placeholder="0.00" min="0.01" step="0.01" required>
-        </div>
-
-        <div class="switch-container">
-          <label class="switch">
-            <input type="checkbox" id="conflictSwitch">
-            <span class="slider"></span>
-          </label>
-          <div>
-            <div class="switch-label-title">Simulate MVCC Conflict</div>
-            <div class="switch-label-desc">Submit 2 parallel updates to trigger block version lock</div>
+    <!-- Main Dashboard Layout -->
+    <div class="dashboard-layout">
+      <!-- Left Column: Accounts list -->
+      <div class="card">
+        <div class="card-title">
+          <span>Active Ledgers Board</span>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button id="initBtn" class="btn-submit"
+              style="padding: 0.4rem 0.8rem; font-size: 0.85rem; box-shadow: none; display: none;"
+              title="Seed starting accounts on Fabric ledger">
+              Initialize Ledger
+            </button>
+            <button id="refreshBtn" class="btn-refresh" title="Refresh Accounts">
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+            </button>
           </div>
         </div>
 
-        <button type="submit" id="submitBtn" class="btn-submit">
-          <span>Transfer Funds</span>
-        </button>
-      </form>
+        <div id="accountsGrid" class="accounts-grid">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Right Column: Sidebar Forms & Session Ledger -->
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+
+        <!-- Execute Transfer -->
+        <div class="card">
+          <div class="card-title">Execute Transfer</div>
+
+          <form id="transferForm" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div class="form-group">
+              <label for="senderSelect">Sender Account</label>
+              <select id="senderSelect" required>
+                <option value="" disabled selected>Select Sender</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="receiverSelect">Receiver Account</label>
+              <select id="receiverSelect" required>
+                <option value="" disabled selected>Select Receiver</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="amountInput">Amount (USD)</label>
+              <input type="number" id="amountInput" placeholder="0.00" min="0.01" step="0.01" required>
+            </div>
+
+            <div class="switch-container">
+              <label class="switch">
+                <input type="checkbox" id="conflictSwitch">
+                <span class="slider"></span>
+              </label>
+              <div>
+                <div class="switch-label-title">Simulate MVCC Conflict</div>
+                <div class="switch-label-desc">Submit 2 parallel updates to trigger block version lock</div>
+              </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-submit">
+              <span>Transfer Funds</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Session Audit Ledger -->
+        <div class="card">
+          <div class="card-title">
+            <span>Session Audit Ledger</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <select id="ledgerFilter"
+                style="padding: 0.25rem 0.5rem; font-size: 0.8rem; width: auto; height: auto; border-radius: 6px; background-color: rgba(2,6,23,0.9);">
+                <option value="ALL">All Statuses</option>
+                <option value="SUCCESS">Success Only</option>
+                <option value="FAILED">Failures Only</option>
+              </select>
+              <button id="exportCsvBtn" class="btn-refresh"
+                style="width: auto; height: auto; padding: 0.25rem 0.5rem; font-size: 0.8rem; font-weight: 600;"
+                title="Export Session Ledger to CSV">
+                Export
+              </button>
+              <button id="clearLedgerBtn" class="btn-refresh"
+                style="width: auto; height: auto; padding: 0.25rem 0.5rem; font-size: 0.8rem; font-weight: 600;"
+                title="Clear transaction ledger history">
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <div class="ledger-table-container">
+            <table class="ledger-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Tx Details</th>
+                  <th>Status</th>
+                  <th>Latency</th>
+                </tr>
+              </thead>
+              <tbody id="ledgerBody">
+                <tr>
+                  <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No transactions
+                    in this session.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Create Account -->
+        <div class="card">
+          <div class="card-title">Create New Account</div>
+
+          <form id="createAccountForm" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div class="form-group">
+              <label for="accountIdInput">Account ID</label>
+              <input type="text" id="accountIdInput" placeholder="e.g. acc4" required>
+            </div>
+
+            <div class="form-group">
+              <label for="ownerInput">Owner Name</label>
+              <input type="text" id="ownerInput" placeholder="e.g. Diana" required>
+            </div>
+
+            <div class="form-group">
+              <label for="balanceInput">Initial Balance (USD)</label>
+              <input type="number" id="balanceInput" placeholder="0.00" min="0.00" step="0.01" required>
+            </div>
+
+            <button type="submit" id="createBtn" class="btn-submit"
+              style="background: linear-gradient(135deg, var(--success), #059669); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);">
+              <span>Create Account</span>
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
 
-    <!-- Bottom: Logging terminal -->
-    <div class="card terminal-card">
+    <!-- Blockchain Event Stream -->
+    <div class="card">
       <div class="card-title">Blockchain Event & Transaction Stream</div>
       <div id="terminal" class="terminal">
         <!-- Log lines dynamically appended here -->
@@ -608,7 +894,35 @@
     const toast = document.getElementById('toast');
     const toastText = document.getElementById('toastText');
 
+    // New element declarations
+    const initBtn = document.getElementById('initBtn');
+    const createAccountForm = document.getElementById('createAccountForm');
+    const accountIdInput = document.getElementById('accountIdInput');
+    const ownerInput = document.getElementById('ownerInput');
+    const balanceInput = document.getElementById('balanceInput');
+    const createBtn = document.getElementById('createBtn');
+
+    // Stats Board Selectors
+    const statTotalAccounts = document.getElementById('statTotalAccounts');
+    const statTotalVault = document.getElementById('statTotalVault');
+    const statAverageBalance = document.getElementById('statAverageBalance');
+
+    // Session Ledger Elements
+    const ledgerBody = document.getElementById('ledgerBody');
+    const ledgerFilter = document.getElementById('ledgerFilter');
+    const exportCsvBtn = document.getElementById('exportCsvBtn');
+    const clearLedgerBtn = document.getElementById('clearLedgerBtn');
+
     let localAccounts = [];
+    let sessionTransactions = [];
+    try {
+      const stored = localStorage.getItem('sessionTransactions');
+      if (stored) {
+        sessionTransactions = JSON.parse(stored);
+      }
+    } catch (e) {
+      console.error('Failed to load sessionTransactions from localStorage:', e);
+    }
 
     // Helper: format timestamp for logs
     function getTimestamp() {
@@ -620,23 +934,23 @@
     function log(message, type = 'info') {
       const line = document.createElement('div');
       line.className = 'term-line';
-      
+
       const timeSpan = document.createElement('span');
       timeSpan.className = 'term-time';
       timeSpan.textContent = `[${getTimestamp()}]`;
-      
+
       const prefixSpan = document.createElement('span');
       prefixSpan.className = 'term-prefix';
       prefixSpan.textContent = '->';
-      
+
       const textSpan = document.createElement('span');
       textSpan.className = `term-${type}`;
       textSpan.textContent = message;
-      
+
       line.appendChild(timeSpan);
       line.appendChild(prefixSpan);
       line.appendChild(textSpan);
-      
+
       terminal.appendChild(line);
       terminal.scrollTop = terminal.scrollHeight;
     }
@@ -650,24 +964,50 @@
       }, 4000);
     }
 
+    // Generate premium card gradient based on account ID
+    function getCardGradient(id) {
+      let hash = 0;
+      for (let i = 0; i < id.length; i++) {
+        hash = id.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const gradients = [
+        'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',   // Sapphire Blue
+        'linear-gradient(135deg, #065f46 0%, #10b981 100%)',   // Emerald Green
+        'linear-gradient(135deg, #581c87 0%, #8b5cf6 100%)',   // Violet Orchid
+        'linear-gradient(135deg, #7c2d12 0%, #d97706 100%)',   // Amber Gold
+        'linear-gradient(135deg, #831843 0%, #db2777 100%)',   // Velvet Rose
+        'linear-gradient(135deg, #0f172a 0%, #334155 100%)',   // Slate Carbon
+        'linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%)'    // Royal Purple
+      ];
+      return gradients[Math.abs(hash) % gradients.length];
+    }
+
     // Load accounts from API
     async function loadAccounts(silent = false) {
       if (!silent) {
         refreshBtn.classList.add('spinning');
         log('Querying Fabric world state (GetAllAccounts)...', 'info');
       }
-      
+
       try {
         const response = await fetch('/accounts');
         if (!response.ok) {
           throw new Error(`Server returned status ${response.status}`);
         }
-        
+
         const accounts = await response.json();
         localAccounts = accounts;
+
         renderAccounts(accounts);
         populateDropdowns(accounts);
-        
+        calculateStats(accounts);
+
+        if (accounts.length === 0) {
+          initBtn.style.display = 'block';
+        } else {
+          initBtn.style.display = 'none';
+        }
+
         if (!silent) {
           log(`Retrieved ${accounts.length} accounts from ledger.`, 'success');
         }
@@ -682,60 +1022,150 @@
       }
     }
 
-    // Render accounts onto grid
+    // Calculate real-time stats
+    function calculateStats(accounts) {
+      const count = accounts.length;
+      const totalVault = accounts.reduce((sum, acc) => sum + Number(acc.Balance), 0);
+      const average = count > 0 ? totalVault / count : 0;
+
+      statTotalAccounts.textContent = count;
+      statTotalVault.textContent = '$' + totalVault.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      statAverageBalance.textContent = '$' + average.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // Render accounts onto credit card grid
     function renderAccounts(accounts) {
       if (accounts.length === 0) {
-        accountsGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">No accounts found. Run InitLedger on contract first.</div>';
+        accountsGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">No accounts found. Run InitLedger on contract first.</div>';
         return;
       }
 
       accountsGrid.innerHTML = accounts.map(acc => `
-        <div class="account-card" onclick="selectAccount('${acc.ID}')">
-          <div class="acc-header">
-            <span class="acc-owner">${acc.Owner}</span>
-            <span class="acc-id">${acc.ID}</span>
+        <div class="account-card" style="background: ${getCardGradient(acc.ID)}" onclick="selectAccount('${acc.ID}')">
+          <div class="card-top">
+            <div class="card-chip-container">
+              <div class="card-chip"></div>
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="rgba(255,255,255,0.7)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(90deg);">
+                <path d="M12 2a10 10 0 0 1 10 10c0 2.22-.72 4.28-1.94 5.94M2 12a10 10 0 0 1 10-10"></path>
+                <path d="M12 6a6 6 0 0 1 6 6c0 1.33-.43 2.57-1.16 3.57M6 12a6 6 0 0 1 6-6"></path>
+              </svg>
+            </div>
+            <span class="card-logo">SECURE BANK</span>
           </div>
+          
           <div class="acc-balance">
             $${Number(acc.Balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             <span class="acc-currency">USD</span>
+          </div>
+          
+          <div class="card-footer">
+            <span class="acc-owner">${acc.Owner}</span>
+            <span class="acc-id">${acc.ID}</span>
           </div>
         </div>
       `).join('');
     }
 
-    // Fill selects
+    // Fill select elements
     function populateDropdowns(accounts) {
       const prevSender = senderSelect.value;
       const prevReceiver = receiverSelect.value;
 
       const optionsHtml = `
         <option value="" disabled selected>Select Account</option>
-        ${accounts.map(acc => `<option value="${acc.ID}">${acc.Owner} (${acc.ID}) - $${acc.Balance}</option>`).join('')}
+        ${accounts.map(acc => `<option value="${acc.ID}">${acc.Owner} (${acc.ID}) - $${Number(acc.Balance).toFixed(2)}</option>`).join('')}
       `;
 
       senderSelect.innerHTML = optionsHtml;
       receiverSelect.innerHTML = optionsHtml;
 
-      // Re-select previous if still exists
       if (accounts.some(a => a.ID === prevSender)) senderSelect.value = prevSender;
       if (accounts.some(a => a.ID === prevReceiver)) receiverSelect.value = prevReceiver;
     }
 
     // Select account card handler
-    window.selectAccount = function(id) {
+    window.selectAccount = function (id) {
       if (!senderSelect.value) {
         senderSelect.value = id;
         log(`Selected ${id} as Sender.`);
       } else if (senderSelect.value !== id) {
         receiverSelect.value = id;
         log(`Selected ${id} as Receiver.`);
+      } else {
+        // Toggle if clicked sender again
+        senderSelect.value = '';
+        log(`Deselected ${id} as Sender.`);
       }
     };
+
+    // Render Session Audit Ledger
+    function renderSessionLedger() {
+      // Save to localStorage to persist across refreshes
+      try {
+        localStorage.setItem('sessionTransactions', JSON.stringify(sessionTransactions));
+      } catch (e) {
+        console.error('Failed to save sessionTransactions to localStorage:', e);
+      }
+
+      const filter = ledgerFilter.value;
+      const filteredTx = sessionTransactions.filter(tx => {
+        if (filter === 'ALL') return true;
+        return tx.status === filter;
+      });
+
+      if (filteredTx.length === 0) {
+        ledgerBody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+              No ${filter !== 'ALL' ? filter.toLowerCase() : ''} transactions in ledger.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      ledgerBody.innerHTML = filteredTx.map(tx => `
+        <tr>
+          <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">${tx.time}</td>
+          <td style="font-weight: 500;">${tx.description}</td>
+          <td>
+            <span class="badge ${tx.status === 'SUCCESS' ? 'badge-success' : 'badge-failed'}">
+              ${tx.status}
+            </span>
+          </td>
+          <td style="font-family: 'JetBrains Mono', monospace; color: var(--text-muted);">${tx.latency}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Export Session Ledger as CSV
+    exportCsvBtn.addEventListener('click', () => {
+      if (sessionTransactions.length === 0) {
+        showToast('No transaction ledger data to export.', true);
+        return;
+      }
+
+      const csvContent = "data:text/csv;charset=utf-8,"
+        + ["Time,Description,Status,Latency,TxHash"].join(",") + "\n"
+        + sessionTransactions.map(tx => `"${tx.time}","${tx.description}","${tx.status}","${tx.latency}","${tx.txHash}"`).join("\n");
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `securebank_ledger_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      log('Exported session transaction logs to CSV.', 'success');
+    });
+
+    // Handle filter change
+    ledgerFilter.addEventListener('change', renderSessionLedger);
 
     // Form submit handler
     transferForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const senderID = senderSelect.value;
       const receiverID = receiverSelect.value;
       const amount = parseFloat(amountInput.value);
@@ -757,39 +1187,64 @@
 
       const payload = { senderID, receiverID, amount };
 
-      // Helper function to send transfer request
       async function sendRequest(label = '') {
         log(`Submitting TransferFunds transaction${label} to orderer...`, 'info');
         const start = performance.now();
-        
+        const generatedHash = 'tx_' + Math.random().toString(16).substr(2, 32);
+
         try {
           const response = await fetch('/transfer', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
-          
+
           const result = await response.json();
           const latency = ((performance.now() - start) / 1000).toFixed(2);
-          
+
           if (!response.ok || !result.success) {
             const err = result.error || 'Unknown error occurred';
             log(`Transaction${label} REJECTED in ${latency}s: ${err}`, 'error');
             showToast(`Transfer Failed: ${err}`, true);
+
+            sessionTransactions.unshift({
+              time: getTimestamp(),
+              description: `Transfer $${amount.toFixed(2)} from ${senderID} to ${receiverID}`,
+              status: 'FAILED',
+              latency: `${latency}s`,
+              txHash: generatedHash
+            });
           } else {
             log(`Transaction${label} COMMITTED successfully in ${latency}s.`, 'success');
             log(`Event Emitted: FundsTransferred { sender: ${senderID}, receiver: ${receiverID}, amount: $${amount} }`, 'success');
             showToast(`Transferred $${amount} successfully!`);
+
+            sessionTransactions.unshift({
+              time: getTimestamp(),
+              description: `Transfer $${amount.toFixed(2)} from ${senderID} to ${receiverID}`,
+              status: 'SUCCESS',
+              latency: `${latency}s`,
+              txHash: generatedHash
+            });
           }
         } catch (error) {
+          const latency = ((performance.now() - start) / 1000).toFixed(2);
           log(`Request${label} failed to submit: ${error.message}`, 'error');
           showToast('Failed to contact client REST server.', true);
+
+          sessionTransactions.unshift({
+            time: getTimestamp(),
+            description: `Transfer $${amount.toFixed(2)} from ${senderID} to ${receiverID}`,
+            status: 'FAILED',
+            latency: `${latency}s`,
+            txHash: generatedHash
+          });
         }
+        renderSessionLedger();
       }
 
       if (conflictSwitch.checked) {
         log('MVCC Stress Simulation: Triggering 2 parallel submissions...', 'info');
-        // Submit 2 identical transaction requests in parallel
         await Promise.all([
           sendRequest(' (Tx A)'),
           sendRequest(' (Tx B)')
@@ -798,19 +1253,108 @@
         await sendRequest();
       }
 
-      // Refresh accounts list
       await loadAccounts(true);
 
       submitBtn.disabled = false;
       submitBtn.innerHTML = '<span>Transfer Funds</span>';
+      amountInput.value = '';
+    });
+
+    // Initialize ledger button handler
+    initBtn.addEventListener('click', async () => {
+      initBtn.disabled = true;
+      initBtn.textContent = 'Initializing...';
+      log('Requesting ledger initialization (InitLedger)...', 'info');
+
+      try {
+        const response = await fetch('/init', { method: 'POST' });
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          const err = result.error || 'Unknown error occurred';
+          log(`Ledger initialization FAILED: ${err}`, 'error');
+          showToast(`Initialization Failed: ${err}`, true);
+        } else {
+          log('Ledger successfully initialized with starting accounts!', 'success');
+          showToast('Ledger initialized successfully!');
+          await loadAccounts();
+        }
+      } catch (error) {
+        log(`Failed to initiate request: ${error.message}`, 'error');
+        showToast('Failed to contact REST server.', true);
+      } finally {
+        initBtn.disabled = false;
+        initBtn.textContent = 'Initialize Ledger';
+      }
+    });
+
+    // Create Account form handler
+    createAccountForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const id = accountIdInput.value.trim();
+      const owner = ownerInput.value.trim();
+      const balance = parseFloat(balanceInput.value);
+
+      if (!id || !owner || isNaN(balance)) {
+        showToast('Please fill in all fields correctly.', true);
+        return;
+      }
+
+      createBtn.disabled = true;
+      createBtn.innerHTML = '<span class="spinner"></span><span>Creating...</span>';
+      log(`Submitting CreateAccount transaction for ID ${id} (Owner: ${owner})...`, 'info');
+
+      try {
+        const response = await fetch('/accounts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, owner, balance })
+        });
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          const err = result.error || 'Unknown error';
+          log(`Account creation FAILED: ${err}`, 'error');
+          showToast(`Creation Failed: ${err}`, true);
+        } else {
+          log(`Account ${id} successfully COMMITTED for ${owner} with balance $${balance}.`, 'success');
+          showToast(`Created account ${id} successfully!`);
+
+          accountIdInput.value = '';
+          ownerInput.value = '';
+          balanceInput.value = '';
+
+          await loadAccounts(true);
+        }
+      } catch (error) {
+        log(`Failed to submit request: ${error.message}`, 'error');
+        showToast('Failed to contact REST server.', true);
+      } finally {
+        createBtn.disabled = false;
+        createBtn.innerHTML = '<span>Create Account</span>';
+      }
     });
 
     // Refresh btn handler
     refreshBtn.addEventListener('click', () => loadAccounts());
 
+    // Clear Ledger button handler
+    clearLedgerBtn.addEventListener('click', () => {
+      if (sessionTransactions.length === 0) return;
+      if (confirm('Are you sure you want to clear the transaction history?')) {
+        sessionTransactions = [];
+        renderSessionLedger();
+        log('Session transaction history cleared.', 'info');
+        showToast('Ledger history cleared.');
+      }
+    });
+
     // Init
     log('REST API Client dashboard initialized.', 'info');
+    renderSessionLedger(); // Render any persisted transactions immediately
     loadAccounts();
   </script>
 </body>
+
 </html>

@@ -4,14 +4,18 @@ import { connect, signers } from '@hyperledger/fabric-gateway';
 import * as crypto from 'crypto';
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 const utf8Decoder = new TextDecoder();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Base directories for crypto material from the Fabric test-network
-const WORKSPACE_DIR = '/Users/dhavalvarvariya/Downloads/CHARUSAT/D';
+const WORKSPACE_DIR = path.resolve(__dirname, '..');
 const CRYPTO_PATH = path.resolve(WORKSPACE_DIR, 'fabric-samples/test-network/organizations/peerOrganizations/org1.example.com');
 const CERT_PATH = path.resolve(CRYPTO_PATH, 'users/User1@org1.example.com/msp/signcerts/cert.pem');
 const KEY_DIR_PATH = path.resolve(CRYPTO_PATH, 'users/User1@org1.example.com/msp/keystore');
@@ -33,7 +37,7 @@ let gatewayInstance = null;
 async function initGateway() {
 	try {
 		console.log('Initializing connection to Fabric peer...');
-		
+
 		// Verify paths exist before proceeding
 		await fs.access(CERT_PATH);
 		await fs.access(KEY_DIR_PATH);
@@ -123,12 +127,12 @@ app.get('/accounts', checkConnection, async (req, res) => {
 		console.log('Querying all accounts...');
 		const resultBytes = await contractInstance.evaluateTransaction('GetAllAccounts');
 		const resultString = utf8Decoder.decode(resultBytes);
-		
+
 		// If empty or null response
 		if (!resultString) {
 			return res.json([]);
 		}
-		
+
 		const accounts = JSON.parse(resultString);
 		res.json(accounts);
 	} catch (error) {
@@ -151,12 +155,12 @@ app.get('/accounts/:id', checkConnection, async (req, res) => {
 	} catch (error) {
 		console.error(`Error fetching account ${accountId}:`, error);
 		const errorMessage = getErrorMessage(error);
-		
+
 		let status = 500;
 		if (errorMessage.includes('does not exist') || errorMessage.includes('not found')) {
 			status = 404;
 		}
-		
+
 		res.status(status).json({
 			success: false,
 			error: errorMessage
@@ -184,7 +188,7 @@ app.post('/transfer', checkConnection, async (req, res) => {
 
 	try {
 		console.log(`Submitting transfer transaction: ${amount} from ${senderID} to ${receiverID}`);
-		
+
 		// Fabric Gateway contract.submitTransaction returns the transaction payload
 		const resultBytes = await contractInstance.submitTransaction(
 			'TransferFunds',
@@ -192,7 +196,7 @@ app.post('/transfer', checkConnection, async (req, res) => {
 			receiverID,
 			amount.toString()
 		);
-		
+
 		const transferResult = JSON.parse(utf8Decoder.decode(resultBytes));
 		res.json({
 			success: true,
@@ -201,7 +205,7 @@ app.post('/transfer', checkConnection, async (req, res) => {
 	} catch (error) {
 		console.error('Transfer transaction failed:', error);
 		const errorMessage = getErrorMessage(error);
-		
+
 		let status = 500;
 		// Categorize typical business validation failures as 400 Bad Request
 		if (
@@ -219,6 +223,59 @@ app.post('/transfer', checkConnection, async (req, res) => {
 		});
 	}
 });
+
+// POST /init -> Initialize ledger with starting accounts
+app.post('/init', checkConnection, async (req, res) => {
+	try {
+		console.log('Submitting InitLedger transaction to the network...');
+		await contractInstance.submitTransaction('InitLedger');
+		res.json({
+			success: true,
+			message: 'Ledger successfully initialized with starting accounts.'
+		});
+	} catch (error) {
+		console.error('Ledger initialization failed:', error);
+		res.status(500).json({
+			success: false,
+			error: getErrorMessage(error)
+		});
+	}
+});
+
+// POST /accounts -> Create a new account
+app.post('/accounts', checkConnection, async (req, res) => {
+	const { id, owner, balance } = req.body;
+
+	if (!id || !owner || balance === undefined) {
+		return res.status(400).json({
+			success: false,
+			error: 'Missing required parameters. Body must include id, owner, and balance.'
+		});
+	}
+
+	if (typeof balance !== 'number') {
+		return res.status(400).json({
+			success: false,
+			error: 'Balance must be a numeric value.'
+		});
+	}
+
+	try {
+		console.log(`Submitting CreateAccount transaction: ID ${id}, Owner ${owner}, Balance ${balance}`);
+		await contractInstance.submitTransaction('CreateAccount', id, owner, balance.toString());
+		res.json({
+			success: true,
+			message: `Account ${id} successfully created for ${owner} with initial balance of ${balance}.`
+		});
+	} catch (error) {
+		console.error('Account creation failed:', error);
+		res.status(500).json({
+			success: false,
+			error: getErrorMessage(error)
+		});
+	}
+});
+
 
 // Clean up connections on process termination
 process.on('SIGINT', async () => {
