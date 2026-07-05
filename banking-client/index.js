@@ -7,236 +7,390 @@ import * as path from 'path';
 
 const app = express();
 const port = process.env.PORT || 3000;
-
 const utf8Decoder = new TextDecoder();
 
-// Base directories for crypto material from the Fabric test-network
-const WORKSPACE_DIR = '/Users/dhavalvarvariya/Downloads/CHARUSAT/D';
-const CRYPTO_PATH = path.resolve(WORKSPACE_DIR, 'fabric-samples/test-network/organizations/peerOrganizations/org1.example.com');
-const CERT_PATH = path.resolve(CRYPTO_PATH, 'users/User1@org1.example.com/msp/signcerts/cert.pem');
-const KEY_DIR_PATH = path.resolve(CRYPTO_PATH, 'users/User1@org1.example.com/msp/keystore');
-const TLS_CERT_PATH = path.resolve(CRYPTO_PATH, 'peers/peer0.org1.example.com/tls/ca.crt');
-
 app.use(express.json());
-app.use(express.static(path.resolve(WORKSPACE_DIR, 'banking-client/public')));
 
-const PEER_ENDPOINT = 'localhost:7051';
-const PEER_HOST_ALIAS = 'peer0.org1.example.com';
-const CHANNEL_NAME = 'mychannel';
+const WORKSPACE_DIR = '/Users/dhavalvarvariya/Downloads/CHARUSAT/D';
+const CHANNEL_NAME = 'bankingchannel';
 const CHAINCODE_NAME = 'banking';
 
-let contractInstance = null;
-let grpcClientInstance = null;
-let gatewayInstance = null;
-
-// Initialize gRPC connection and Fabric Gateway client
-async function initGateway() {
-	try {
-		console.log('Initializing connection to Fabric peer...');
-		
-		// Verify paths exist before proceeding
-		await fs.access(CERT_PATH);
-		await fs.access(KEY_DIR_PATH);
-		await fs.access(TLS_CERT_PATH);
-
-		grpcClientInstance = await newGrpcConnection();
-		const identity = await getIdentity();
-		const signer = await getSigner();
-
-		gatewayInstance = connect({
-			client: grpcClientInstance,
-			identity,
-			signer,
-			// Default timeouts matching common Fabric setups
-			evaluateOptions: () => ({ deadline: Date.now() + 5000 }),
-			submitOptions: () => ({ deadline: Date.now() + 10000 }),
-			commitStatusOptions: () => ({ deadline: Date.now() + 60000 }),
-		});
-
-		const network = gatewayInstance.getNetwork(CHANNEL_NAME);
-		contractInstance = network.getContract(CHAINCODE_NAME);
-		console.log('Successfully connected to Fabric gateway and resolved contract!');
-	} catch (error) {
-		console.error('Failed to initialize Fabric Gateway:', error.message);
-		console.error('Make sure the Fabric test-network is running and crypto paths are correct.');
-	}
-}
-
-async function newGrpcConnection() {
-	const tlsCACert = await fs.readFile(TLS_CERT_PATH);
-	const tlsCredentials = grpc.credentials.createSsl(tlsCACert);
-	return new grpc.Client(PEER_ENDPOINT, tlsCredentials, {
-		'grpc.ssl_target_name_override': PEER_HOST_ALIAS,
-		'grpc.default_authority': PEER_HOST_ALIAS,
-	});
-}
-
-async function getIdentity() {
-	const credentials = await fs.readFile(CERT_PATH);
-	return { mspId: 'Org1MSP', credentials };
-}
-
-async function getSigner() {
-	const files = await fs.readdir(KEY_DIR_PATH);
-	// Select the first private key file that isn't hidden
+// Helper to locate private key
+async function getPrivateKey(keyDirPath) {
+	const files = await fs.readdir(keyDirPath);
 	const keyFile = files.find(file => !file.startsWith('.') && file.endsWith('_sk'));
 	if (!keyFile) {
-		// Fallback to first non-hidden file if naming convention is different
 		const fallbackFile = files.find(file => !file.startsWith('.'));
 		if (!fallbackFile) {
-			throw new Error(`No private key file found in ${KEY_DIR_PATH}`);
+			throw new Error(`No private key file found in ${keyDirPath}`);
 		}
-		return buildPrivateKeySigner(path.join(KEY_DIR_PATH, fallbackFile));
+		return path.join(keyDirPath, fallbackFile);
 	}
-	return buildPrivateKeySigner(path.join(KEY_DIR_PATH, keyFile));
+	return path.join(keyDirPath, keyFile);
 }
 
-async function buildPrivateKeySigner(keyPath) {
-	const privateKeyPem = await fs.readFile(keyPath);
-	const privateKey = crypto.createPrivateKey(privateKeyPem);
-	return signers.newPrivateKeySigner(privateKey);
-}
+// Dynamically create a connection context based on requested Org and Role
+async function getContract(orgName, roleName) {
+	let peerAddress = 'localhost:7051';
+	let peerHostAlias = 'peer0.banka.example.com';
+	let mspId = 'BankAMSP';
+	let orgFolder = 'banka.example.com';
+	let userFolder = 'User1@banka.example.com'; // Default user
 
-// Middleware to ensure gateway is active before handling requests
-const checkConnection = (req, res, next) => {
-	if (!contractInstance) {
-		return res.status(503).json({
-			success: false,
-			error: 'Fabric Gateway client is not connected. Ensure the Fabric network is running.'
-		});
+	// Map Org & Role to the corresponding crypto directories
+	if (orgName === 'BankB') {
+		peerAddress = 'localhost:9051';
+		peerHostAlias = 'peer0.bankb.example.com';
+		mspId = 'BankBMSP';
+		orgFolder = 'bankb.example.com';
+		if (roleName === 'branch_manager') {
+			userFolder = 'Manager@bankb.example.com';
+		} else {
+			userFolder = 'User1@bankb.example.com';
+		}
+	} else if (orgName === 'RegulatorOrg') {
+		peerAddress = 'localhost:11051';
+		peerHostAlias = 'peer0.regulator.example.com';
+		mspId = 'RegulatorOrgMSP';
+		orgFolder = 'regulator.example.com';
+		if (roleName === 'compliance_officer') {
+			userFolder = 'Compliance@regulator.example.com';
+		} else {
+			userFolder = 'User1@regulator.example.com';
+		}
+	} else {
+		// Default to BankA
+		if (roleName === 'branch_manager') {
+			userFolder = 'Manager@banka.example.com';
+		} else if (roleName === 'teller') {
+			userFolder = 'Teller@banka.example.com';
+		}
 	}
-	next();
-};
 
-function getErrorMessage(error) {
-	if (error.details && Array.isArray(error.details) && error.details.length > 0) {
-		return error.details.map(d => d.message).join('; ');
-	}
-	return error.message || String(error);
-}
+	const cryptoPath = path.resolve(WORKSPACE_DIR, `banking-network/crypto-config/peerOrganizations/${orgFolder}`);
+	const certPath = path.resolve(cryptoPath, `users/${userFolder}/msp/signcerts/cert.pem`);
+	const keyDirPath = path.resolve(cryptoPath, `users/${userFolder}/msp/keystore`);
+	const tlsCertPath = path.resolve(cryptoPath, `peers/${peerHostAlias}/tls/ca.crt`);
 
-// REST API Endpoints
-
-// GET /accounts -> Get all accounts
-app.get('/accounts', checkConnection, async (req, res) => {
+	// Verify crypto exists
 	try {
-		console.log('Querying all accounts...');
-		const resultBytes = await contractInstance.evaluateTransaction('GetAllAccounts');
-		const resultString = utf8Decoder.decode(resultBytes);
-		
-		// If empty or null response
-		if (!resultString) {
-			return res.json([]);
-		}
-		
-		const accounts = JSON.parse(resultString);
-		res.json(accounts);
+		await fs.access(certPath);
+		await fs.access(keyDirPath);
+		await fs.access(tlsCertPath);
+	} catch (e) {
+		// Fallback to Fabric test-network Org1 if custom banking-network does not exist yet (for local verification)
+		const fallbackCrypto = path.resolve(WORKSPACE_DIR, 'fabric-samples/test-network/organizations/peerOrganizations/org1.example.com');
+		return getFallbackContract(fallbackCrypto);
+	}
+
+	const tlsCACert = await fs.readFile(tlsCertPath);
+	const tlsCredentials = grpc.credentials.createSsl(tlsCACert);
+	const grpcClient = new grpc.Client(peerAddress, tlsCredentials, {
+		'grpc.ssl_target_name_override': peerHostAlias,
+		'grpc.default_authority': peerHostAlias,
+	});
+
+	const credentials = await fs.readFile(certPath);
+	const identity = { mspId, credentials };
+
+	const privateKeyPath = await getPrivateKey(keyDirPath);
+	const privateKeyPem = await fs.readFile(privateKeyPath);
+	const privateKey = crypto.createPrivateKey(privateKeyPem);
+	const signer = signers.newPrivateKeySigner(privateKey);
+
+	const gateway = connect({
+		client: grpcClient,
+		identity,
+		signer,
+		evaluateOptions: () => ({ deadline: Date.now() + 5000 }),
+		submitOptions: () => ({ deadline: Date.now() + 10000 }),
+		commitStatusOptions: () => ({ deadline: Date.now() + 60000 }),
+	});
+
+	const network = gateway.getNetwork(CHANNEL_NAME);
+	return {
+		contract: network.getContract(CHAINCODE_NAME),
+		gateway,
+		grpcClient
+	};
+}
+
+// Fallback helper using default Fabric test-network certificates
+async function getFallbackContract(fallbackCrypto) {
+	const certPath = path.resolve(fallbackCrypto, 'users/User1@org1.example.com/msp/signcerts/cert.pem');
+	const keyDirPath = path.resolve(fallbackCrypto, 'users/User1@org1.example.com/msp/keystore');
+	const tlsCertPath = path.resolve(fallbackCrypto, 'peers/peer0.org1.example.com/tls/ca.crt');
+
+	const tlsCACert = await fs.readFile(tlsCertPath);
+	const tlsCredentials = grpc.credentials.createSsl(tlsCACert);
+	const grpcClient = new grpc.Client('localhost:7051', tlsCredentials, {
+		'grpc.ssl_target_name_override': 'peer0.org1.example.com',
+		'grpc.default_authority': 'peer0.org1.example.com',
+	});
+
+	const credentials = await fs.readFile(certPath);
+	const identity = { mspId: 'Org1MSP', credentials };
+
+	const privateKeyPath = await getPrivateKey(keyDirPath);
+	const privateKeyPem = await fs.readFile(privateKeyPath);
+	const privateKey = crypto.createPrivateKey(privateKeyPem);
+	const signer = signers.newPrivateKeySigner(privateKey);
+
+	const gateway = connect({
+		client: grpcClient,
+		identity,
+		signer,
+	});
+
+	const network = gateway.getNetwork('mychannel');
+	return {
+		contract: network.getContract(CHAINCODE_NAME),
+		gateway,
+		grpcClient
+	};
+}
+
+// Middleware to inject context based on headers
+async function getContext(req, res, next) {
+	const org = req.headers['x-org'] || 'BankA';
+	const role = req.headers['x-role'] || 'teller';
+	try {
+		const ctxObj = await getContract(org, role);
+		req.fabric = ctxObj;
+		next();
 	} catch (error) {
-		console.error('Error fetching accounts:', error);
-		res.status(500).json({
-			success: false,
-			error: getErrorMessage(error)
-		});
+		res.status(500).json({ success: false, error: `Connection failed: ${error.message}` });
+	}
+}
+
+// Cleanup helper
+function closeConnections(fabricCtx) {
+	if (fabricCtx) {
+		if (fabricCtx.gateway) fabricCtx.gateway.close();
+		if (fabricCtx.grpcClient) fabricCtx.grpcClient.close();
+	}
+}
+
+// REST Endpoints
+
+// 1. Create Account
+app.post('/accounts', getContext, async (req, res) => {
+	const { id, owner, balance } = req.body;
+	try {
+		await req.fabric.contract.submitTransaction('CreateAccount', id, owner, balance.toString());
+		res.status(201).json({ success: true, message: `Account ${id} created successfully` });
+	} catch (error) {
+		res.status(400).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
 	}
 });
 
-// GET /accounts/:id -> Get specific account details
-app.get('/accounts/:id', checkConnection, async (req, res) => {
-	const accountId = req.params.id;
+// 2. Fetch Account
+app.get('/accounts/:id', getContext, async (req, res) => {
+	const id = req.params.id;
 	try {
-		console.log(`Querying account: ${accountId}`);
-		const resultBytes = await contractInstance.evaluateTransaction('GetAccount', accountId);
+		const resultBytes = await req.fabric.contract.evaluateTransaction('GetAccount', id);
 		const account = JSON.parse(utf8Decoder.decode(resultBytes));
 		res.json(account);
 	} catch (error) {
-		console.error(`Error fetching account ${accountId}:`, error);
-		const errorMessage = getErrorMessage(error);
-		
-		let status = 500;
-		if (errorMessage.includes('does not exist') || errorMessage.includes('not found')) {
-			status = 404;
-		}
-		
-		res.status(status).json({
-			success: false,
-			error: errorMessage
-		});
+		res.status(404).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
 	}
 });
 
-// POST /transfer -> Transfer funds between accounts
-app.post('/transfer', checkConnection, async (req, res) => {
+// 3. Update KYC Status (ABAC checked)
+app.post('/accounts/:id/kyc', getContext, async (req, res) => {
+	const id = req.params.id;
+	const { status } = req.body;
+	try {
+		await req.fabric.contract.submitTransaction('UpdateKYCStatus', id, status);
+		res.json({ success: true, message: `KYC status of ${id} set to ${status}` });
+	} catch (error) {
+		res.status(403).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
+	}
+});
+
+// 4. Freeze Account (ABAC checked)
+app.post('/accounts/:id/freeze', getContext, async (req, res) => {
+	const id = req.params.id;
+	try {
+		await req.fabric.contract.submitTransaction('FreezeAccount', id);
+		res.json({ success: true, message: `Account ${id} has been frozen` });
+	} catch (error) {
+		res.status(403).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
+	}
+});
+
+// 5. Transfer Funds
+app.post('/transfer', getContext, async (req, res) => {
 	const { senderID, receiverID, amount } = req.body;
-
-	if (!senderID || !receiverID || amount === undefined) {
-		return res.status(400).json({
-			success: false,
-			error: 'Missing required parameters. Body must include senderID, receiverID, and amount.'
-		});
+	try {
+		await req.fabric.contract.submitTransaction('TransferFunds', senderID, receiverID, amount.toString());
+		res.json({ success: true, message: `Successfully transferred ${amount} from ${senderID} to ${receiverID}` });
+	} catch (error) {
+		res.status(400).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
 	}
+});
 
-	if (typeof amount !== 'number') {
-		return res.status(400).json({
-			success: false,
-			error: 'Amount must be a numeric value.'
-		});
+// 6. Deposit Funds
+app.post('/deposit', getContext, async (req, res) => {
+	const { id, amount } = req.body;
+	try {
+		await req.fabric.contract.submitTransaction('DepositFunds', id, amount.toString());
+		res.json({ success: true, message: `Deposited ${amount} to account ${id}` });
+	} catch (error) {
+		res.status(400).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
 	}
+});
+
+// 7. Withdraw Funds
+app.post('/withdraw', getContext, async (req, res) => {
+	const { id, amount } = req.body;
+	try {
+		await req.fabric.contract.submitTransaction('WithdrawFunds', id, amount.toString());
+		res.json({ success: true, message: `Withdrew ${amount} from account ${id}` });
+	} catch (error) {
+		res.status(400).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
+	}
+});
+
+// 8. Get Account Transaction History
+app.get('/accounts/:id/history', getContext, async (req, res) => {
+	const id = req.params.id;
+	try {
+		const resultBytes = await req.fabric.contract.evaluateTransaction('GetTransactionHistory', id);
+		const records = JSON.parse(utf8Decoder.decode(resultBytes));
+		res.json(records);
+	} catch (error) {
+		res.status(500).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
+	}
+});
+
+// 9. Create Loan Application
+app.post('/loans', getContext, async (req, res) => {
+	const { id, applicantID, amount } = req.body;
+	try {
+		await req.fabric.contract.submitTransaction('CreateLoanApplication', id, applicantID, amount.toString());
+		res.status(201).json({ success: true, message: `Loan application ${id} created for ${applicantID}` });
+	} catch (error) {
+		res.status(400).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
+	}
+});
+
+// 10. Approve Loan (ABAC Checked)
+app.post('/loans/:id/approve', getContext, async (req, res) => {
+	const id = req.params.id;
+	try {
+		await req.fabric.contract.submitTransaction('ApproveLoan', id);
+		res.json({ success: true, message: `Loan application ${id} approved by caller` });
+	} catch (error) {
+		res.status(403).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
+	}
+});
+
+// 11. Disburse Loan
+app.post('/loans/:id/disburse', getContext, async (req, res) => {
+	const id = req.params.id;
+	try {
+		await req.fabric.contract.submitTransaction('DisburseLoan', id);
+		res.json({ success: true, message: `Loan ${id} disbursed successfully` });
+	} catch (error) {
+		res.status(400).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
+	}
+});
+
+// 12. Flag Suspicious Transaction (ABAC Checked)
+app.post('/transactions/:txID/flag', getContext, async (req, res) => {
+	const txID = req.params.txID;
+	const { accountID } = req.body;
+	try {
+		await req.fabric.contract.submitTransaction('FlagSuspiciousTransaction', accountID, txID);
+		res.json({ success: true, message: `Transaction ${txID} flagged as suspicious` });
+	} catch (error) {
+		res.status(403).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
+	}
+});
+
+// 13. Audit Trail (RegulatorOrg only)
+app.get('/audit', getContext, async (req, res) => {
+	const query = req.query.query || '{"selector":{"docType":"transaction"}}';
+	try {
+		const resultBytes = await req.fabric.contract.evaluateTransaction('GetAuditTrail', query);
+		const trail = JSON.parse(utf8Decoder.decode(resultBytes));
+		res.json(trail);
+	} catch (error) {
+		res.status(403).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
+	}
+});
+
+// 14. Upload KYC Private Document
+app.post('/accounts/:id/kycdoc', getContext, async (req, res) => {
+	const id = req.params.id;
+	const { fullName, nationalId, documentHash } = req.body;
+
+	const kycData = JSON.stringify({
+		accountId: id,
+		fullName,
+		nationalId,
+		documentHash
+	});
 
 	try {
-		console.log(`Submitting transfer transaction: ${amount} from ${senderID} to ${receiverID}`);
-		
-		// Fabric Gateway contract.submitTransaction returns the transaction payload
-		const resultBytes = await contractInstance.submitTransaction(
-			'TransferFunds',
-			senderID,
-			receiverID,
-			amount.toString()
-		);
-		
-		const transferResult = JSON.parse(utf8Decoder.decode(resultBytes));
-		res.json({
-			success: true,
-			data: transferResult
+		// Use transient data map for private data to protect PII
+		const transaction = req.fabric.contract.newProposal('UploadKYCDocument', {
+			arguments: [id],
+			transientData: {
+				kycData: Buffer.from(kycData)
+			}
 		});
+
+		const resultBytes = await transaction.submit();
+		res.json({ success: true, message: `Private KYC document uploaded for account ${id}` });
 	} catch (error) {
-		console.error('Transfer transaction failed:', error);
-		const errorMessage = getErrorMessage(error);
-		
-		let status = 500;
-		// Categorize typical business validation failures as 400 Bad Request
-		if (
-			errorMessage.includes('insufficient funds') ||
-			errorMessage.includes('not found') ||
-			errorMessage.includes('cannot be the same') ||
-			errorMessage.includes('greater than zero')
-		) {
-			status = 400;
-		}
-
-		res.status(status).json({
-			success: false,
-			error: errorMessage
-		});
+		res.status(500).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
 	}
 });
 
-// Clean up connections on process termination
-process.on('SIGINT', async () => {
-	console.log('\nGracefully shutting down client...');
-	if (gatewayInstance) {
-		gatewayInstance.close();
-		console.log('Fabric Gateway connection closed.');
+// 15. Read KYC Private Document
+app.get('/accounts/:id/kycdoc', getContext, async (req, res) => {
+	const id = req.params.id;
+	try {
+		const resultBytes = await req.fabric.contract.evaluateTransaction('ReadKYCDocument', id);
+		const kyc = JSON.parse(utf8Decoder.decode(resultBytes));
+		res.json(kyc);
+	} catch (error) {
+		res.status(404).json({ success: false, error: error.message });
+	} finally {
+		closeConnections(req.fabric);
 	}
-	if (grpcClientInstance) {
-		grpcClientInstance.close();
-		console.log('gRPC client connection closed.');
-	}
-	process.exit(0);
 });
 
-// Initialize connection and start server
-initGateway().then(() => {
-	app.listen(port, () => {
-		console.log(`Banking Client API server is running on http://localhost:${port}`);
-	});
+app.listen(port, () => {
+	console.log(`Enterprise Banking Gateway running on http://localhost:${port}`);
 });

@@ -11,6 +11,7 @@ class BankingWorkload extends WorkloadModuleBase {
     async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
         await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
         this.action = this.roundArguments.action;
+        this.totalAccounts = this.roundArguments.totalAccounts || 1000;
     }
 
     async submitTransaction() {
@@ -28,13 +29,33 @@ class BankingWorkload extends WorkloadModuleBase {
             readOnly = false;
         } else if (this.action === 'transfer') {
             contractFunction = 'TransferFunds';
-            // Transfer from acc1 to acc2 (seeded accounts)
-            contractArguments = ['acc1', 'acc2', '1.00'];
+            
+            const totalCreatedPerWorker = Math.floor(this.totalAccounts / this.totalWorkers);
+            const randomSenderWorker = Math.floor(Math.random() * this.totalWorkers);
+            const randomSenderIdx = Math.floor(Math.random() * totalCreatedPerWorker) + 1;
+            
+            let randomReceiverWorker = Math.floor(Math.random() * this.totalWorkers);
+            let randomReceiverIdx = Math.floor(Math.random() * totalCreatedPerWorker) + 1;
+            
+            // Ensure sender and receiver are different
+            if (randomSenderWorker === randomReceiverWorker && randomSenderIdx === randomReceiverIdx) {
+                randomReceiverIdx = (randomReceiverIdx % totalCreatedPerWorker) + 1;
+            }
+            
+            const senderId = `work_acc_${randomSenderWorker}_${randomSenderIdx}`;
+            const receiverId = `work_acc_${randomReceiverWorker}_${randomReceiverIdx}`;
+            
+            contractArguments = [senderId, receiverId, '1.00'];
             readOnly = false;
         } else {
             // query
             contractFunction = 'GetAccount';
-            contractArguments = ['acc1'];
+            const totalCreatedPerWorker = Math.floor(this.totalAccounts / this.totalWorkers);
+            const randomWorker = Math.floor(Math.random() * this.totalWorkers);
+            const randomIdx = Math.floor(Math.random() * totalCreatedPerWorker) + 1;
+            const accountId = `work_acc_${randomWorker}_${randomIdx}`;
+            
+            contractArguments = [accountId];
             readOnly = true;
         }
 

@@ -1,0 +1,186 @@
+Organizations:
+  - &OrdererOrg
+    Name: OrdererOrg
+    ID: OrdererMSP
+    MSPDir: crypto-config/ordererOrganizations/example.com/msp
+    Policies:
+      Reader:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Writer:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Admin:
+        Type: Signature
+        Rule: "OR('OrdererMSP.admin')"
+
+  - &BankA
+    Name: BankA
+    ID: BankAMSP
+    MSPDir: crypto-config/peerOrganizations/banka.example.com/msp
+    Policies:
+      Reader:
+        Type: Signature
+        Rule: "OR('BankAMSP.admin', 'BankAMSP.peer', 'BankAMSP.client')"
+      Writer:
+        Type: Signature
+        Rule: "OR('BankAMSP.admin', 'BankAMSP.client')"
+      Admin:
+        Type: Signature
+        Rule: "OR('BankAMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('BankAMSP.peer')"
+    AnchorPeers:
+      - Host: peer0.banka.example.com
+        Port: 7051
+
+  - &BankB
+    Name: BankB
+    ID: BankBMSP
+    MSPDir: crypto-config/peerOrganizations/bankb.example.com/msp
+    Policies:
+      Reader:
+        Type: Signature
+        Rule: "OR('BankBMSP.admin', 'BankBMSP.peer', 'BankBMSP.client')"
+      Writer:
+        Type: Signature
+        Rule: "OR('BankBMSP.admin', 'BankBMSP.client')"
+      Admin:
+        Type: Signature
+        Rule: "OR('BankBMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('BankBMSP.peer')"
+    AnchorPeers:
+      - Host: peer0.bankb.example.com
+        Port: 9051
+
+  - &RegulatorOrg
+    Name: RegulatorOrg
+    ID: RegulatorOrgMSP
+    MSPDir: crypto-config/peerOrganizations/regulator.example.com/msp
+    Policies:
+      Reader:
+        Type: Signature
+        Rule: "OR('RegulatorOrgMSP.admin', 'RegulatorOrgMSP.peer', 'RegulatorOrgMSP.client')"
+      Writer:
+        Type: Signature
+        Rule: "OR('RegulatorOrgMSP.admin', 'RegulatorOrgMSP.client')"
+      Admin:
+        Type: Signature
+        Rule: "OR('RegulatorOrgMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('RegulatorOrgMSP.peer')"
+    AnchorPeers:
+      - Host: peer0.regulator.example.com
+        Port: 11051
+
+Capabilities:
+  Channel: &ChannelCapabilities
+    V2_0: true
+  Orderer: &OrdererCapabilities
+    V2_0: true
+  Application: &ApplicationCapabilities
+    V2_5: true
+
+Application: &ApplicationDefaults
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+  Capabilities:
+    <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+  OrdererType: etcdraft
+  Addresses:
+    - orderer1.example.com:7050
+    - orderer2.example.com:8050
+    - orderer3.example.com:9050
+  EtcdRaft:
+    Consenters:
+      - Host: orderer1.example.com
+        Port: 7050
+        ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
+      - Host: orderer2.example.com
+        Port: 8050
+        ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+      - Host: orderer3.example.com
+        Port: 9050
+        ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 100
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+
+Channel: &ChannelDefaults
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+Profiles:
+  ThreeOrgChannel:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+      Capabilities:
+        <<: *OrdererCapabilities
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *BankA
+        - *BankB
+        - *RegulatorOrg
+      Capabilities:
+        <<: *ApplicationCapabilities
+    Consortium: SampleConsortium
+    Consortiums:
+      SampleConsortium:
+        Organizations:
+          - *BankA
+          - *BankB
+          - *RegulatorOrg

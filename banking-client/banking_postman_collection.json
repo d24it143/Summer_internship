@@ -1,0 +1,324 @@
+{
+	"info": {
+		"_postman_id": "e6a2bc4b-e60d-4001-a18c-3be4ad8a6e3d",
+		"name": "Hyperledger Fabric Banking API",
+		"description": "Collection to test the ABAC and Private Data collection endpoints for the banking application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Account Management",
+			"item": [
+				{
+					"name": "Create Account (Alice)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "teller" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"acc100\",\n    \"owner\": \"Alice Smith\",\n    \"balance\": 5000.00\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/accounts",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["accounts"]
+						}
+					}
+				},
+				{
+					"name": "Get Account Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "teller" }
+						],
+						"url": {
+							"raw": "http://localhost:3000/accounts/acc100",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["accounts", "acc100"]
+						}
+					}
+				},
+				{
+					"name": "Freeze Account (Restricted to Manager)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "branch_manager" }
+						],
+						"url": {
+							"raw": "http://localhost:3000/accounts/acc100/freeze",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["accounts", "acc100", "freeze"]
+						}
+					}
+				},
+				{
+					"name": "Update KYC Status",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "branch_manager" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"Verified\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/accounts/acc100/kyc",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["accounts", "acc100", "kyc"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Deposit Funds",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "teller" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"acc100\",\n    \"amount\": 500.00\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/deposit",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["deposit"]
+						}
+					}
+				},
+				{
+					"name": "Transfer Funds",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "teller" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"senderID\": \"acc100\",\n    \"receiverID\": \"acc1\",\n    \"amount\": 250.00\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/transfer",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["transfer"]
+						}
+					}
+				},
+				{
+					"name": "Get Transaction History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "teller" }
+						],
+						"url": {
+							"raw": "http://localhost:3000/accounts/acc100/history",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["accounts", "acc100", "history"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Loans & Credit",
+			"item": [
+				{
+					"name": "Apply for Loan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "teller" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"loan001\",\n    \"applicantID\": \"acc100\",\n    \"amount\": 25000.00\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/loans",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["loans"]
+						}
+					}
+				},
+				{
+					"name": "Approve Loan (Bank A Manager)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "branch_manager" }
+						],
+						"url": {
+							"raw": "http://localhost:3000/loans/loan001/approve",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["loans", "loan001", "approve"]
+						}
+					}
+				},
+				{
+					"name": "Approve Loan (Regulator Manager)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "X-Org", "value": "RegulatorOrg" },
+							{ "key": "X-Role", "value": "branch_manager" }
+						],
+						"url": {
+							"raw": "http://localhost:3000/loans/loan001/approve",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["loans", "loan001", "approve"]
+						}
+					}
+				},
+				{
+					"name": "Disburse Loan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "teller" }
+						],
+						"url": {
+							"raw": "http://localhost:3000/loans/loan001/disburse",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["loans", "loan001", "disburse"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Compliance & Privacy",
+			"item": [
+				{
+					"name": "Upload Private KYC Docs (Transient PII)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "teller" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Alice Smith\",\n    \"nationalId\": \"US-987-654-321\",\n    \"documentHash\": \"f2d9a3b8d4e9c701b2a95c102bd92c102bd8a7\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/accounts/acc100/kycdoc",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["accounts", "acc100", "kycdoc"]
+						}
+					}
+				},
+				{
+					"name": "Read Private KYC Doc (Private Access)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "X-Org", "value": "BankA" },
+							{ "key": "X-Role", "value": "teller" }
+						],
+						"url": {
+							"raw": "http://localhost:3000/accounts/acc100/kycdoc",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["accounts", "acc100", "kycdoc"]
+						}
+					}
+				},
+				{
+					"name": "Flag Suspicious Transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "X-Org", "value": "RegulatorOrg" },
+							{ "key": "X-Role", "value": "compliance_officer" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountID\": \"acc100\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/transactions/mock_tx_id/flag",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["transactions", "mock_tx_id", "flag"]
+						}
+					}
+				},
+				{
+					"name": "Get Audit Trail (Regulator Org Only)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "X-Org", "value": "RegulatorOrg" },
+							{ "key": "X-Role", "value": "compliance_officer" }
+						],
+						"url": {
+							"raw": "http://localhost:3000/audit?query={\"selector\":{\"docType\":\"transaction\"}}",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["audit"],
+							"query": [
+								{ "key": "query", "value": "{\"selector\":{\"docType\":\"transaction\"}}" }
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}

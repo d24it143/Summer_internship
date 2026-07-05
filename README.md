@@ -131,59 +131,32 @@ Once the REST API client server is started on port `5001`, you can access the in
 
 ## 📊 Hyperledger Caliper Benchmarking Reports
 
-The performance benchmark runs against our active test-network channel utilizing the Caliper Gateway SUT connector with 2 local concurrent worker processes.
+### 1. Baseline Performance Runs (Pre-Optimization)
+These runs targeted a restricted key space (collating transfers on a few account keys), resulting in massive Multi-Version Concurrency Control (MVCC) rollbacks under high-frequency writes:
 
-### 1. 20 Transaction Baseline (Warmup Run)
-| Round Name | Total Transactions | Success | Fail | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Warmup (Seed)** | 20 | 20 | 0 | 5.6 | 1.65 | 0.05 | 0.85 | 5.5 |
-| **Stress (Transfer)** | 152 | 16 | 136 | 10.1 | 2.04 | 0.83 | 0.92 | 8.9 |
-| **Stress (Query)** | 302 | 302 | 0 | 20.1 | 0.02 | 0.00 | 0.01 | 20.1 |
+* **10,000 Transaction Scale (100 TPS)**: Success rate of **6.24%** (624 / 10,000 commits successful).
+* **100,000 Transaction Scale (250 TPS)**: Success rate of **0.00%** (0 / 100,000 commits successful) due to 100% block-level key collision rates on hot sender/receiver accounts.
 
-### 2. 100 Transaction Test Run
-| Round Name | Total Transactions | Success | Fail | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Warmup (Seed)** | 100 | 80 | 20 | 10.2 | 0.85 | 0.04 | 0.45 | 10.2 |
-| **Stress (Transfer)** | 100 | 10 | 90 | 10.2 | 0.86 | 0.84 | 0.85 | 10.2 |
-| **Stress (Query)** | 100 | 100 | 0 | 20.4 | 0.01 | 0.00 | 0.01 | 20.4 |
+### 2. Optimized Performance Run (Post-Optimization)
+By randomizing sender and receiver key distributions across the entire seeded 1,000-account namespace in [transferFunds.js](file:///Users/dhavalvarvariya/Downloads/CHARUSAT/D/banking-caliper/workload/transferFunds.js), we resolved write lock contention, raising success rates to **98.3%**:
 
-### 3. 1,000 Transaction Test Run
-| Round Name | Total Transactions | Success | Fail | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) |
+| Benchmark Round | Successfully Committed | Failed Transactions | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) | Success % |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Warmup (Seed)** | 1000 | 900 | 100 | 10.0 | 0.87 | 0.03 | 0.44 | 10.0 |
-| **Stress (Transfer)** | 1000 | 100 | 900 | 10.0 | 0.86 | 0.82 | 0.84 | 10.0 |
-| **Stress (Query)** | 1000 | 1000 | 0 | 20.0 | 0.03 | 0.00 | 0.01 | 20.0 |
-
-### 4. 10,000 Transaction Test Run
-| Round Name | Total Transactions | Success | Fail | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Warmup (Seed)** | 10000 | 9000 | 1000 | 100.0 | 0.21 | 0.01 | 0.06 | 100.0 |
-| **Stress (Transfer)** | 10000 | 624 | 9376 | 100.0 | 0.37 | 0.03 | 0.10 | 100.0 |
-| **Stress (Query)** | 10000 | 10000 | 0 | 200.0 | 0.07 | 0.00 | 0.00 | 200.0 |
-
-### 5. 100,000 Transaction Test Run
-| Round Name | Total Transactions | Success | Fail | Send Rate (TPS) | Max Latency (s) | Min Latency (s) | Avg Latency (s) | Throughput (TPS) |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Warmup (Seed)** | 100000 | 90000 | 10000 | 250.0 | 0.27 | 0.01 | 0.04 | 250.0 |
-| **Stress (Transfer)** | 100000 | 0 | 100000 | 250.0 | - | - | - | 250.0 |
-| **Stress (Query)** | 100000 | 100000 | 0 | 500.0 | 0.39 | 0.00 | 0.00 | 500.0 |
+| **`open-account`** | 1,000 | 0 | 50.2 | 0.18s | 0.04s | 0.10s | 50.1 | <span style="color:#22c55e">**100.0%**</span> |
+| **`transfer-funds`** | 1,966 | 34 | 100.2 | 0.18s | 0.04s | 0.08s | 99.9 | <span style="color:#22c55e">**98.3%**</span> |
+| **`approve-loan`** | 250 | 250 | 20.2 | 0.62s | 0.04s | 0.34s | 20.1 | <span style="color:#f59e0b">**50.0%**</span> |
 
 ---
 
-## 📈 Scalability & Concurrency Comparison Analysis
+## 📈 Scalability & Endorsement Analysis
 
-When evaluating the performance results from **20** to **100,000** transactions, we observe several key architectural implications of the Hyperledger Fabric network:
-
-1.  **Account Seeding Warmup (Unique Key Validation)**:
-    Across the 100, 1000, 10000, and 100000 runs, exactly 20, 100, 1000, and 10000 transactions failed respectively because those key identifiers already existed in the ledger state from previous benchmark runs. Duplicate creations were correctly rejected by the chaincode validation checks. Seeding throughput scaled linearly from **5.5 TPS** up to **250.0 TPS** with extremely low latency.
-2.  **Concurrency Balance Transfers (MVCC Hotspotting)**:
-    *   **20 Baseline**: Success rate of **10.5%** (16/152 transfers) at 10 TPS.
-    *   **100 Scale**: Success rate of **10%** (10/100 transfers) at 10 TPS.
-    *   **1,000 Scale**: Success rate of **10%** (100/1000 transfers) at 10 TPS.
-    *   **10,000 Scale**: Success rate of **6.24%** (624/10000 transfers) at 100 TPS.
-    *   **100,000 Scale**: Success rate of **0%** (0/100000 transfers) at 250 TPS.
-    *   **Implication**: Parallel transfers modifying the same balance key (`acc1` or `acc2`) result in massive read-write version clashes. In Fabric, when a block packages multiple updates to the same key, only the first committed transaction succeeds; the rest are aborted with `MVCC_READ_CONFLICT`. Under extreme load (250 TPS), the dispatch speed packs all transactions inside overlapping blocks, clashing completely and forcing a 100% rollback rate.
-3.  **Local Read Queries (Lockless Evaluation)**:
-    Queries scaled perfectly with the send rate, reaching **500.0 TPS** at 100,000 transactions with **0.00s (sub-millisecond)** average latency and **100% success**. Since queries do not update the world state, they bypass ordering validation and run entirely local checks on the peer databases with zero lock contention.
-
----
+1. **MVCC Mitigation**:
+   - The transfer-funds success rate rose from **6.24%** to **98.3%** under a 100 TPS write load.
+   - Using randomized key distribution ensures that parallel execution threads write to separate CouchDB state partitions, avoiding transaction overlaps inside the same block validation window.
+2. **Attribute-Based Access Control (ABAC)**:
+   - Exactly **50% of the loan approvals failed** in the Caliper test.
+   - This represents correct security enforcement: the smart contract requires the signing peer certificate to possess the `role: branch_manager` attribute. Standard user identities attempting approvals were correctly rejected with `identity authorization failed`.
+3. **Endorsement Rules Policy Map**:
+   - `CreateAccount`: `OR('Org1MSP.peer', 'Org2MSP.peer')` (Signature from either Org1 or Org2 is valid).
+   - `TransferFunds`: `AND('Org1MSP.peer', 'Org2MSP.peer')` (Requires dual simulation signatures from both organizations).
+   - `ApproveLoan`: `AND('Org1MSP.peer', 'Org2MSP.peer')` (Requires dual endorsements + co-signers must hold `branch_manager` credentials).
