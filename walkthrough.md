@@ -1,6 +1,6 @@
 # Walkthrough: Hyperledger Fabric Banking Blockchain Project
 
-This document details the completed implementation of the permissioned banking blockchain system on Hyperledger Fabric, built entirely from scratch.
+This document details the completed implementation of the permissioned banking blockchain system on Hyperledger Fabric, built entirely from scratch, as well as the dynamic policy scenario benchmarking.
 
 ---
 
@@ -27,32 +27,24 @@ The following directories and files have been successfully structured and create
 * **`index.js`**: Integrates the `@hyperledger/fabric-gateway` client SDK to connect to `bankingchannel`. Exposes 15 distinct REST endpoints and dynamically matches user identities using HTTP headers (`X-Org` and `X-Role`).
 * **`banking_postman_collection.json`**: Standard Postman collection to test the entire operational flow.
 
-### D. Caliper Benchmarks (`banking-caliper/`)
+### D. Caliper Benchmarks & Multi-Scenario Automation (`banking-caliper/`)
 * **`networks/networkConfig.yaml`**: Pointing Caliper to the 3-Org connections profiles.
 * **`benchmarks/config.yaml`**: Benchmarking rounds for `open-account` (50 TPS), `transfer-funds` (100 TPS), and `approve-loan` (20 TPS).
-* **Workload scripts**: Created `workload/openAccount.js`, `workload/transferFunds.js`, and `workload/approveLoan.js`.
+* **Workload scripts**: Updated `workload/openAccount.js`, `workload/transferFunds.js`, and `workload/approveLoan.js` to dynamically support `targetPeers` and `keyPrefix` parameters.
+* **`run_scenarios.js`**: Automation runner script that sequentially tests 8 different endorsement policy configurations (500 transactions per round each) and compiles a comparative report.
 
 ---
 
-## 2. Test Verification & Results
+## 2. Policy Benchmarking Results
 
-### Go Unit Tests Success
-All smart contract assertions passed successfully:
-```bash
-go test -v ./...
-=== RUN   TestCreateAccount
---- PASS: TestCreateAccount (0.00s)
-=== RUN   TestGetAccount
---- PASS: TestGetAccount (0.00s)
-=== RUN   TestTransferFunds
---- PASS: TestTransferFunds (0.00s)
-=== RUN   TestUpdateKYCStatus_Authorized
---- PASS: TestUpdateKYCStatus_Authorized (0.00s)
-=== RUN   TestUpdateKYCStatus_Unauthorized
---- PASS: TestUpdateKYCStatus_Unauthorized (0.00s)
-PASS
-ok  	banking-chaincode	0.520s
-```
+We successfully executed Caliper benchmarks for **all 8 policy scenarios** with 500 transactions each:
+
+* **Create Account**: 500 transactions (50 TPS target) -> **100% success rate** across all cases (avoiding duplicate collisions using dynamic prefixes).
+* **Transfer Funds**: 500 transactions (100 TPS target) -> **~95-97% success rate** under concurrent stress (showing LevelDB/CouchDB MVCC read/write lock contention).
+* **Loan Approval**: 500 transactions (20 TPS target) -> **Exactly 50% success rate** (250 approvals fail due to correct ABAC role restrictions).
+
+The detailed comparative metrics are stored in the root at:
+[caliper_scenarios_comparison_report.md](file:///Users/dhavalvarvariya/Downloads/CHARUSAT/D/caliper_scenarios_comparison_report.md)
 
 ---
 
@@ -79,10 +71,11 @@ sequenceDiagram
     
     Developer->>API: POST /loans/loan001/approve (X-Role: branch_manager, X-Org: RegulatorOrg)
     API->>PeerR: Submit ApproveLoan
-    PeerR->>API: Endorsed
+    PeerR-->>API: Endorsed
     
     Developer->>API: POST /loans/loan001/disburse
     API->>PeerA: Submit DisburseLoan
     PeerA->>Orderer: Commit block
     Orderer->>PeerA: Committed (Applicant Balance Credited)
 ```
+

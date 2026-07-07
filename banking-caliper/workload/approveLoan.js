@@ -10,12 +10,14 @@ class ApproveLoanWorkload extends WorkloadModuleBase {
 
     async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
         await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
+        this.targetPeers = (roundArguments && roundArguments.targetPeers) || [];
+        this.keyPrefix = (roundArguments && roundArguments.keyPrefix) || '';
     }
 
     async submitTransaction() {
         this.txIndex++;
-        const loanId = `loan_${this.workerIndex}_${this.txIndex}`;
-        const applicantId = `caliper_acc_${this.workerIndex}_1`; // Use first created account as applicant
+        const loanId = `${this.keyPrefix}loan_${this.workerIndex}_${this.txIndex}`;
+        const applicantId = `${this.keyPrefix}caliper_acc_${this.workerIndex}_1`; // Use first created account as applicant
         
         let contractFunction = 'CreateLoanApplication';
         let contractArguments = [loanId, applicantId, '5000.00'];
@@ -25,7 +27,7 @@ class ApproveLoanWorkload extends WorkloadModuleBase {
         if (this.txIndex % 2 === 0) {
             contractFunction = 'ApproveLoan';
             const targetLoanIdx = Math.floor(this.txIndex / 2);
-            const targetLoanId = `loan_${this.workerIndex}_${targetLoanIdx}`;
+            const targetLoanId = `${this.keyPrefix}loan_${this.workerIndex}_${targetLoanIdx}`;
             contractArguments = [targetLoanId];
         }
 
@@ -35,6 +37,10 @@ class ApproveLoanWorkload extends WorkloadModuleBase {
             contractArguments,
             readOnly: false
         };
+
+        if (this.targetPeers && this.targetPeers.length > 0) {
+            request.targetPeers = this.targetPeers;
+        }
 
         await this.sutAdapter.sendRequests(request);
     }

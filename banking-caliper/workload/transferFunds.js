@@ -10,7 +10,9 @@ class TransferFundsWorkload extends WorkloadModuleBase {
 
     async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
         await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
-        this.totalAccounts = (roundArguments && roundArguments.totalAccounts) || 1000;
+        this.totalAccounts = (roundArguments && roundArguments.totalAccounts) || 500;
+        this.targetPeers = (roundArguments && roundArguments.targetPeers) || [];
+        this.keyPrefix = (roundArguments && roundArguments.keyPrefix) || '';
     }
 
     async submitTransaction() {
@@ -32,8 +34,8 @@ class TransferFundsWorkload extends WorkloadModuleBase {
             randomReceiverIdx = (randomReceiverIdx % totalCreatedPerWorker) + 1;
         }
         
-        const senderId = `caliper_acc_${randomSenderWorker}_${randomSenderIdx}`;
-        const receiverId = `caliper_acc_${randomReceiverWorker}_${randomReceiverIdx}`;
+        const senderId = `${this.keyPrefix}caliper_acc_${randomSenderWorker}_${randomSenderIdx}`;
+        const receiverId = `${this.keyPrefix}caliper_acc_${randomReceiverWorker}_${randomReceiverIdx}`;
 
         const request = {
             contractId: 'banking',
@@ -41,6 +43,10 @@ class TransferFundsWorkload extends WorkloadModuleBase {
             contractArguments: [senderId, receiverId, '1.00'],
             readOnly: false
         };
+
+        if (this.targetPeers && this.targetPeers.length > 0) {
+            request.targetPeers = this.targetPeers;
+        }
 
         await this.sutAdapter.sendRequests(request);
     }

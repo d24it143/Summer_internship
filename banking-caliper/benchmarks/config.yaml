@@ -5,19 +5,26 @@ test:
     number: 5
   rounds:
     - label: open-account
-      txNumber: 1000
+      txNumber: 500
       rateControl:
         type: fixed-rate
         opts: { tps: 50 }
       workload:
         module: workload/openAccount.js
+        arguments:
+          targetPeers: []
+          keyPrefix: ""
     - label: transfer-funds
-      txNumber: 2000
+      txNumber: 500
       rateControl:
         type: fixed-rate
         opts: { tps: 100 }
       workload:
         module: workload/transferFunds.js
+        arguments:
+          targetPeers: []
+          keyPrefix: ""
+          totalAccounts: 500
     - label: approve-loan
       txNumber: 500
       rateControl:
@@ -25,3 +32,6 @@ test:
         opts: { tps: 20 }
       workload:
         module: workload/approveLoan.js
+        arguments:
+          targetPeers: []
+          keyPrefix: ""

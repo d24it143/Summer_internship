@@ -10,12 +10,14 @@ class OpenAccountWorkload extends WorkloadModuleBase {
 
     async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
         await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
+        this.targetPeers = (roundArguments && roundArguments.targetPeers) || [];
+        this.keyPrefix = (roundArguments && roundArguments.keyPrefix) || '';
     }
 
     async submitTransaction() {
         this.txIndex++;
-        const accountId = `caliper_acc_${this.workerIndex}_${this.txIndex}`;
-        const owner = `CaliperUser_${this.workerIndex}_${this.txIndex}`;
+        const accountId = `${this.keyPrefix}caliper_acc_${this.workerIndex}_${this.txIndex}`;
+        const owner = `${this.keyPrefix}CaliperUser_${this.workerIndex}_${this.txIndex}`;
         
         const request = {
             contractId: 'banking',
@@ -23,6 +25,10 @@ class OpenAccountWorkload extends WorkloadModuleBase {
             contractArguments: [accountId, owner, '1000.00'],
             readOnly: false
         };
+
+        if (this.targetPeers && this.targetPeers.length > 0) {
+            request.targetPeers = this.targetPeers;
+        }
 
         await this.sutAdapter.sendRequests(request);
     }
