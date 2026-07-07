@@ -41,10 +41,11 @@ We successfully executed Caliper benchmarks for **all 8 policy scenarios** with 
 
 * **Create Account**: 500 transactions (50 TPS target) -> **100% success rate** across all cases (avoiding duplicate collisions using dynamic prefixes).
 * **Transfer Funds**: 500 transactions (100 TPS target) -> **~95-97% success rate** under concurrent stress (showing LevelDB/CouchDB MVCC read/write lock contention).
-* **Loan Approval**: 500 transactions (20 TPS target) -> **Exactly 50% success rate** (250 approvals fail due to correct ABAC role restrictions).
+* **Loan Approval**: 500/1000 transactions (20 TPS target) -> **Exactly 50% success rate** (250/500 approvals fail due to correct ABAC role restrictions).
 
 The detailed comparative metrics are stored in the root at:
-[caliper_scenarios_comparison_report.md](file:///Users/dhavalvarvariya/Downloads/CHARUSAT/D/caliper_scenarios_comparison_report.md)
+* **500 Transactions Report**: [caliper_scenarios_comparison_report.md](file:///Users/dhavalvarvariya/Downloads/CHARUSAT/D/caliper_scenarios_comparison_report.md)
+* **1000 Transactions Report**: [caliper_scenarios_comparison_report_1000.md](file:///Users/dhavalvarvariya/Downloads/CHARUSAT/D/caliper_scenarios_comparison_report_1000.md)
 
 ---
 
