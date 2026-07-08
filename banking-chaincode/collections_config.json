@@ -1,7 +1,7 @@
 [
   {
     "name": "kycPrivateCollection",
-    "policy": "OR('BankAMSP.member', 'BankBMSP.member', 'RegulatorOrgMSP.member')",
+    "policy": "OR('Org1MSP.member', 'Org2MSP.member')",
     "requiredPeerCount": 1,
     "maxPeerCount": 2,
     "blockToLive": 0,

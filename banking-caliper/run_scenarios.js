@@ -63,31 +63,31 @@ function generateYamlConfig(c, keyPrefix) {
     number: 5
   rounds:
     - label: open-account
-      txNumber: 2000
+      txNumber: 5000
       rateControl:
         type: fixed-rate
-        opts: { tps: 50 }
+        opts: { tps: 30 }
       workload:
         module: workload/openAccount.js
         arguments:
           targetPeers: ${JSON.stringify(c.create)}
           keyPrefix: "${keyPrefix}"
     - label: transfer-funds
-      txNumber: 2000
+      txNumber: 5000
       rateControl:
         type: fixed-rate
-        opts: { tps: 100 }
+        opts: { tps: 50 }
       workload:
         module: workload/transferFunds.js
         arguments:
           targetPeers: ${JSON.stringify(c.transfer)}
           keyPrefix: "${keyPrefix}"
-          totalAccounts: 2000
+          totalAccounts: 5000
     - label: approve-loan
-      txNumber: 2000
+      txNumber: 5000
       rateControl:
         type: fixed-rate
-        opts: { tps: 20 }
+        opts: { tps: 15 }
       workload:
         module: workload/approveLoan.js
         arguments:
@@ -97,7 +97,7 @@ function generateYamlConfig(c, keyPrefix) {
 }
 
 function parseReport(caseName) {
-  const fileName = `report_${caseName.toLowerCase().replace(' ', '_')}_2000.html`;
+  const fileName = `report_${caseName.toLowerCase().replace(' ', '_')}_5000.html`;
   const filePath = path.join(__dirname, fileName);
   if (!fs.existsSync(filePath)) {
     console.error(`Report file not found: ${filePath}`);
@@ -132,9 +132,9 @@ async function run() {
   
   for (let i = 0; i < cases.length; i++) {
     const c = cases[i];
-    const keyPrefix = `c${i+1}_2000_`;
+    const keyPrefix = `c${i+1}_5000_`;
     console.log(`\n========================================`);
-    console.log(`Starting execution for: ${c.name} (2,000 Transactions)`);
+    console.log(`Starting execution for: ${c.name} (5,000 Transactions)`);
     console.log(`========================================`);
     
     // Write temporary YAML config
@@ -149,7 +149,7 @@ async function run() {
       execSync(cmd, { stdio: 'inherit' });
       
       // Copy report to case-specific HTML report
-      const destReportName = `report_${c.name.toLowerCase().replace(' ', '_')}_2000.html`;
+      const destReportName = `report_${c.name.toLowerCase().replace(' ', '_')}_5000.html`;
       fs.copyFileSync(path.join(__dirname, 'report.html'), path.join(__dirname, destReportName));
       console.log(`Saved report for ${c.name} as ${destReportName}`);
       
@@ -169,8 +169,8 @@ async function run() {
   } catch (e) {}
 
   // Generate comparative markdown report
-  let reportMd = `# Hyperledger Caliper Policy Scenarios Comparison Report (2,000 Transactions)\n\n`;
-  reportMd += `This report compares performance across the 8 different endorsement policy configurations requested. Each case executed 2000 transactions per round with workers. Channel validation policies were set to \`OR\` to accept both 1 and 2 peer endorsements, allowing performance comparison without validation failures.\n\n`;
+  let reportMd = `# Hyperledger Caliper Policy Scenarios Comparison Report (5,000 Transactions)\n\n`;
+  reportMd += `This report compares performance across the 8 different endorsement policy configurations requested. Each case executed 5000 transactions per round with workers. Channel validation policies were set to \`OR\` to accept both 1 and 2 peer endorsements, allowing performance comparison without validation failures.\n\n`;
   
   // Helper to get case policy display
   const getPolicyName = (arr) => arr.length === 1 ? 'P1 OR P2' : 'P1 AND P2';
@@ -212,9 +212,9 @@ async function run() {
   reportMd += `3. **Write Bottlenecks in Fabric:**\n`;
   reportMd += `   - In the \`transfer-funds\` round, even with key distribution, MVCC read/write conflicts can occur under high TPS. Using single peer signatures (\`OR\`) mitigates the round-trip latency, helping to finish transaction execution faster and reduce overlapping lock windows, leading to higher success rates.\n`;
 
-  fs.writeFileSync(path.join(__dirname, '..', 'caliper_scenarios_comparison_report_2000.md'), reportMd);
+  fs.writeFileSync(path.join(__dirname, '..', 'caliper_scenarios_comparison_report_5000.md'), reportMd);
   console.log(`\n========================================`);
-  console.log(`Successfully generated caliper_scenarios_comparison_report_2000.md`);
+  console.log(`Successfully generated caliper_scenarios_comparison_report_5000.md`);
   console.log(`========================================\n`);
 }
 
