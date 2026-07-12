@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const transactionCounts = [2500, 3000, 3500, 4000, 4500];
+const transactionCounts = [4500];
 
 const cases = [
   {
@@ -181,6 +181,16 @@ async function startBatch() {
       const cmd = `npx caliper launch manager --caliper-workspace ./ --caliper-networkconfig networks/networkConfig.yaml --caliper-benchconfig benchmarks/config_temp.yaml --caliper-flow-only-test`;
       console.log(`Executing: ${cmd}`);
       
+      // Delete any existing report.html to avoid stale copies on failure
+      const reportPath = path.join(__dirname, 'report.html');
+      if (fs.existsSync(reportPath)) {
+        try {
+          fs.unlinkSync(reportPath);
+        } catch (unlinkErr) {
+          console.warn(`Could not delete old report.html: ${unlinkErr.message}`);
+        }
+      }
+
       try {
         // Run with 12 minutes (720000 ms) timeout
         execSync(cmd, { stdio: 'inherit', timeout: 720000 });
