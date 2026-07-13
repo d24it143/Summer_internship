@@ -19,10 +19,10 @@ This report compares performance across the 8 different endorsement policy confi
 
 | Scenario | Policy Type | Success | Fail | Send Rate (TPS) | Avg Latency (s) | Throughput (TPS) | Success % |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Case 1** | P1 OR P2 | 2500 | 0 | 30.1 | 0.63s | 30 | **100.0%** |
-| **Case 2** | P1 AND P2 | 2495 | 5 | 13.1 | 17.93s | 11.5 | **99.8%** |
-| **Case 3** | P1 AND P2 | 2500 | 0 | 30.1 | 0.16s | 30 | **100.0%** |
-| **Case 4** | P1 OR P2 | 2500 | 0 | 30.1 | 0.16s | 30 | **100.0%** |
+| **Case 1** | P1 OR P2 | 2500 | 0 | 30.1 | 0.13s | 30 | **100.0%** |
+| **Case 2** | P1 AND P2 | 2500 | 0 | 30.1 | 0.13s | 30 | **100.0%** |
+| **Case 3** | P1 AND P2 | 2500 | 0 | 30.1 | 0.13s | 30 | **100.0%** |
+| **Case 4** | P1 OR P2 | 2500 | 0 | 30 | 0.16s | 30 | **100.0%** |
 | **Case 5** | P1 OR P2 | 2500 | 0 | 30.1 | 0.16s | 30 | **100.0%** |
 | **Case 6** | P1 AND P2 | 2500 | 0 | 30.1 | 0.17s | 30 | **100.0%** |
 | **Case 7** | P1 OR P2 | 2500 | 0 | 30.1 | 0.16s | 30 | **100.0%** |
@@ -32,10 +32,10 @@ This report compares performance across the 8 different endorsement policy confi
 
 | Scenario | Policy Type | Success | Fail | Send Rate (TPS) | Avg Latency (s) | Throughput (TPS) | Success % |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Case 1** | P1 AND P2 | 2480 | 20 | 50.1 | 0.12s | 50 | **99.2%** |
-| **Case 2** | P1 OR P2 | 2483 | 17 | 50.1 | 0.13s | 50 | **99.3%** |
-| **Case 3** | P1 AND P2 | 2485 | 15 | 50.1 | 0.12s | 50 | **99.4%** |
-| **Case 4** | P1 OR P2 | 2485 | 15 | 50.1 | 0.12s | 50 | **99.4%** |
+| **Case 1** | P1 AND P2 | 2481 | 19 | 50.1 | 0.1s | 50 | **99.2%** |
+| **Case 2** | P1 OR P2 | 2481 | 19 | 50.1 | 0.09s | 50 | **99.2%** |
+| **Case 3** | P1 AND P2 | 2486 | 14 | 50.1 | 0.1s | 50.1 | **99.4%** |
+| **Case 4** | P1 OR P2 | 2485 | 15 | 50.1 | 0.09s | 50.1 | **99.4%** |
 | **Case 5** | P1 AND P2 | 2485 | 15 | 50.1 | 0.12s | 50 | **99.4%** |
 | **Case 6** | P1 OR P2 | 2477 | 23 | 50.1 | 0.13s | 50 | **99.1%** |
 | **Case 7** | P1 OR P2 | 2485 | 15 | 50.1 | 0.13s | 50 | **99.4%** |
@@ -45,10 +45,10 @@ This report compares performance across the 8 different endorsement policy confi
 
 | Scenario | Policy Type | Success | Fail | Send Rate (TPS) | Avg Latency (s) | Throughput (TPS) | Success % |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Case 1** | P1 AND P2 | 1250 | 1250 | 15 | 0.41s | 15 | **50.0%** |
-| **Case 2** | P1 AND P2 | 1250 | 1250 | 15 | 0.41s | 15 | **50.0%** |
-| **Case 3** | P1 OR P2 | 1250 | 1250 | 13.4 | 0.55s | 13.3 | **50.0%** |
-| **Case 4** | P1 AND P2 | 1250 | 1250 | 13.4 | 0.55s | 13.3 | **50.0%** |
+| **Case 1** | P1 AND P2 | 1245 | 1255 | 7.2 | 1.29s | 7.2 | **49.8%** |
+| **Case 2** | P1 AND P2 | 1250 | 1250 | 15 | 0.38s | 15 | **50.0%** |
+| **Case 3** | P1 OR P2 | 1250 | 1250 | 15 | 0.38s | 15 | **50.0%** |
+| **Case 4** | P1 AND P2 | 1250 | 1250 | 15 | 0.38s | 15 | **50.0%** |
 | **Case 5** | P1 OR P2 | 1250 | 1250 | 13.4 | 0.55s | 13.3 | **50.0%** |
 | **Case 6** | P1 OR P2 | 1250 | 1250 | 15 | 0.42s | 15 | **50.0%** |
 | **Case 7** | P1 OR P2 | 1250 | 1250 | 15 | 0.41s | 15 | **50.0%** |
