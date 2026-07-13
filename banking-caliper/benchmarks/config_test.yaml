@@ -1,0 +1,37 @@
+test:
+  name: banking-chaincode-benchmark
+  description: Throughput/latency test for banking chaincode
+  workers:
+    number: 1
+  rounds:
+    - label: open-account
+      txNumber: 10
+      rateControl:
+        type: fixed-rate
+        opts: { tps: 10 }
+      workload:
+        module: workload/openAccount.js
+        arguments:
+          targetPeers: ["peer0.org1.example.com"]
+          keyPrefix: "test_"
+    - label: transfer-funds
+      txNumber: 10
+      rateControl:
+        type: fixed-rate
+        opts: { tps: 10 }
+      workload:
+        module: workload/transferFunds.js
+        arguments:
+          targetPeers: ["peer0.org1.example.com", "peer0.org2.example.com"]
+          keyPrefix: "test_"
+          totalAccounts: 10
+    - label: approve-loan
+      txNumber: 10
+      rateControl:
+        type: fixed-rate
+        opts: { tps: 10 }
+      workload:
+        module: workload/approveLoan.js
+        arguments:
+          targetPeers: ["peer0.org1.example.com", "peer0.org2.example.com"]
+          keyPrefix: "test_"

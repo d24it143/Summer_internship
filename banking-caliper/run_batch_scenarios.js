@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const transactionCounts = [4500];
+const transactionCounts = [10];
 
 const cases = [
   {
