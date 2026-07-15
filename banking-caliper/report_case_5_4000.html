@@ -154,13 +154,13 @@
                     </tr>
 
                     <tr>
-                         <td>open-account</td> <td>4000</td> <td>0</td> <td>30.0</td> <td>0.28</td> <td>0.04</td> <td>0.16</td> <td>30.0</td>
+                         <td>open-account</td> <td>4000</td> <td>0</td> <td>30.0</td> <td>0.46</td> <td>0.02</td> <td>0.13</td> <td>30.0</td>
                     </tr>
                     <tr>
-                         <td>transfer-funds</td> <td>3980</td> <td>20</td> <td>50.1</td> <td>0.22</td> <td>0.05</td> <td>0.12</td> <td>50.0</td>
+                         <td>transfer-funds</td> <td>3986</td> <td>14</td> <td>50.1</td> <td>0.25</td> <td>0.01</td> <td>0.08</td> <td>50.0</td>
                     </tr>
                     <tr>
-                         <td>approve-loan</td> <td>2000</td> <td>2000</td> <td>15.0</td> <td>0.87</td> <td>0.05</td> <td>0.44</td> <td>15.0</td>
+                         <td>approve-loan</td> <td>2000</td> <td>2000</td> <td>15.0</td> <td>0.87</td> <td>0.01</td> <td>0.38</td> <td>15.0</td>
                     </tr>
                 </table>
             </div>
@@ -178,7 +178,7 @@
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>open-account</td> <td>4000</td> <td>0</td> <td>30.0</td> <td>0.28</td> <td>0.04</td> <td>0.16</td> <td>30.0</td>
+                                     <td>open-account</td> <td>4000</td> <td>0</td> <td>30.0</td> <td>0.46</td> <td>0.02</td> <td>0.13</td> <td>30.0</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for open-account</h3>
@@ -198,7 +198,7 @@
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>transfer-funds</td> <td>3980</td> <td>20</td> <td>50.1</td> <td>0.22</td> <td>0.05</td> <td>0.12</td> <td>50.0</td>
+                                     <td>transfer-funds</td> <td>3986</td> <td>14</td> <td>50.1</td> <td>0.25</td> <td>0.01</td> <td>0.08</td> <td>50.0</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for transfer-funds</h3>
@@ -218,7 +218,7 @@
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>approve-loan</td> <td>2000</td> <td>2000</td> <td>15.0</td> <td>0.87</td> <td>0.05</td> <td>0.44</td> <td>15.0</td>
+                                     <td>approve-loan</td> <td>2000</td> <td>2000</td> <td>15.0</td> <td>0.87</td> <td>0.01</td> <td>0.38</td> <td>15.0</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for approve-loan</h3>
@@ -243,8 +243,7 @@ rounds:
       arguments:
         targetPeers:
           - peer0.org1.example.com
-          - peer0.org2.example.com
-        keyPrefix: c3_4000_
+        keyPrefix: c5_4000_
   - label: transfer-funds
     txNumber: 4000
     rateControl:
@@ -257,7 +256,7 @@ rounds:
         targetPeers:
           - peer0.org1.example.com
           - peer0.org2.example.com
-        keyPrefix: c3_4000_
+        keyPrefix: c5_4000_
         totalAccounts: 4000
   - label: approve-loan
     txNumber: 4000
@@ -270,7 +269,7 @@ rounds:
       arguments:
         targetPeers:
           - peer0.org1.example.com
-        keyPrefix: c3_4000_
+        keyPrefix: c5_4000_
 </pre>
                 <h3>SUT</h3>
                 <pre id="sutdetails">not provided</pre>
