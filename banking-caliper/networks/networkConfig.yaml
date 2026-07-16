@@ -15,7 +15,7 @@ organizations:
       certificates:
         - name: User1
           clientPrivateKey:
-            path: /Users/dhavalvarvariya/Downloads/CHARUSAT/D/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/a4ce158e271b76deb09e74c84cbd5fab2b385320a306dfc9c850894a08cb8c73_sk
+            path: /Users/dhavalvarvariya/Downloads/CHARUSAT/D/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/0f04c5e1b723f381f33ea63d23ec3e3507e775e62c8bd9d891000434f35d7400_sk
           clientSignedCert:
             path: /Users/dhavalvarvariya/Downloads/CHARUSAT/D/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/cert.pem
     connectionProfile:
