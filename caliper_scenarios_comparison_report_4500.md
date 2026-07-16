@@ -19,8 +19,8 @@ This report compares performance across the 8 different endorsement policy confi
 
 | Scenario | Policy Type | Success | Fail | Send Rate (TPS) | Avg Latency (s) | Throughput (TPS) | Success % |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Case 1** | P1 OR P2 | 3190 | 1310 | 30 | 0.12s | 29.6 | **70.9%** |
-| **Case 2** | P1 AND P2 | 4000 | 0 | 30 | 0.16s | 30 | **100.0%** |
+| **Case 1** | P1 OR P2 | 4500 | 0 | 30 | 0.12s | 30 | **100.0%** |
+| **Case 2** | P1 AND P2 | 4500 | 0 | 30 | 0.12s | 30 | **100.0%** |
 | **Case 3** | P1 AND P2 | 4000 | 0 | 30 | 0.16s | 30 | **100.0%** |
 | **Case 4** | P1 OR P2 | 4000 | 0 | 30 | 0.16s | 30 | **100.0%** |
 | **Case 5** | P1 OR P2 | 4000 | 0 | 30 | 0.16s | 30 | **100.0%** |
@@ -32,8 +32,8 @@ This report compares performance across the 8 different endorsement policy confi
 
 | Scenario | Policy Type | Success | Fail | Send Rate (TPS) | Avg Latency (s) | Throughput (TPS) | Success % |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Case 1** | P1 AND P2 | 0 | 4500 | 50 | 0s | 0 | **0.0%** |
-| **Case 2** | P1 OR P2 | 3980 | 20 | 50.1 | 0.12s | 50 | **99.5%** |
+| **Case 1** | P1 AND P2 | 4477 | 23 | 50 | 0.09s | 50 | **99.5%** |
+| **Case 2** | P1 OR P2 | 4483 | 17 | 50 | 0.08s | 50 | **99.6%** |
 | **Case 3** | P1 AND P2 | 3980 | 20 | 50.1 | 0.12s | 50 | **99.5%** |
 | **Case 4** | P1 OR P2 | 3980 | 20 | 50.1 | 0.12s | 50 | **99.5%** |
 | **Case 5** | P1 AND P2 | 3980 | 20 | 50.1 | 0.12s | 50 | **99.5%** |
@@ -45,8 +45,8 @@ This report compares performance across the 8 different endorsement policy confi
 
 | Scenario | Policy Type | Success | Fail | Send Rate (TPS) | Avg Latency (s) | Throughput (TPS) | Success % |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Case 1** | P1 AND P2 | 0 | 4500 | 15 | 0s | 0 | **0.0%** |
-| **Case 2** | P1 AND P2 | 2000 | 2000 | 15 | 0.44s | 15 | **50.0%** |
+| **Case 1** | P1 AND P2 | 2250 | 2250 | 15 | 0.37s | 15 | **50.0%** |
+| **Case 2** | P1 AND P2 | 2250 | 2250 | 15 | 0.37s | 15 | **50.0%** |
 | **Case 3** | P1 OR P2 | 2000 | 2000 | 15 | 0.44s | 15 | **50.0%** |
 | **Case 4** | P1 AND P2 | 2000 | 2000 | 15 | 0.44s | 15 | **50.0%** |
 | **Case 5** | P1 OR P2 | 2000 | 2000 | 15 | 0.44s | 15 | **50.0%** |
