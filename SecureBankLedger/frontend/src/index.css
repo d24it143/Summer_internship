@@ -1,0 +1,191 @@
+/*
+ * SecureBank Ledger — frontend/src/index.css
+ * Global styles + Tailwind directives (fixed for Tailwind 3 compatibility)
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-surface-200;
+  }
+
+  body {
+    @apply bg-surface text-slate-100 antialiased font-sans;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-surface;
+  }
+
+  ::selection {
+    background-color: rgba(99, 102, 241, 0.4);
+    color: white;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-surface-100; }
+  ::-webkit-scrollbar-thumb { @apply bg-surface-200 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-surface-300; }
+}
+
+@layer components {
+  /* ── Cards ────────────────────────────────────── */
+  .card {
+    @apply bg-surface-100 backdrop-blur-sm border border-surface-200 rounded-2xl shadow-xl;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-300;
+  }
+  .card-hover:hover {
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+  }
+
+  /* ── Glassmorphism ────────────────────────────── */
+  .glass {
+    @apply backdrop-blur-md border rounded-2xl;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* ── Buttons ──────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-600 hover:bg-brand-500 text-white active:scale-95;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+
+  .btn-secondary {
+    @apply btn bg-surface-200 hover:bg-surface-300 text-slate-200 active:scale-95;
+  }
+
+  .btn-danger {
+    @apply btn text-red-400 border active:scale-95;
+    background-color: rgba(220, 38, 38, 0.2);
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+  .btn-danger:hover {
+    background-color: rgba(220, 38, 38, 0.3);
+  }
+
+  .btn-ghost {
+    @apply btn text-slate-400 hover:text-slate-200;
+  }
+  .btn-ghost:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* ── Form inputs ──────────────────────────────── */
+  .input {
+    @apply w-full bg-surface-100 border border-surface-200 rounded-xl px-4 py-2.5 text-sm text-slate-100
+           placeholder:text-slate-500 transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent;
+  }
+
+  .input-error {
+    @apply border-red-500 focus:ring-red-500;
+  }
+
+  .label {
+    @apply block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5;
+  }
+
+  /* ── Badges ───────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  }
+
+  .badge-green {
+    @apply badge text-emerald-400;
+    background-color: rgba(16, 185, 129, 0.15);
+  }
+  .badge-red {
+    @apply badge text-red-400;
+    background-color: rgba(239, 68, 68, 0.15);
+  }
+  .badge-yellow {
+    @apply badge text-amber-400;
+    background-color: rgba(245, 158, 11, 0.15);
+  }
+  .badge-blue {
+    @apply badge text-blue-400;
+    background-color: rgba(59, 130, 246, 0.15);
+  }
+  .badge-purple {
+    @apply badge text-purple-400;
+    background-color: rgba(139, 92, 246, 0.15);
+  }
+  .badge-gray {
+    @apply badge text-slate-400;
+    background-color: rgba(100, 116, 139, 0.15);
+  }
+
+  /* ── Table ────────────────────────────────────── */
+  .table-base {
+    @apply w-full text-sm;
+  }
+
+  .table-base th {
+    @apply px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider
+           border-b border-surface-200;
+  }
+
+  .table-base td {
+    @apply px-4 py-3.5 border-b border-surface-200;
+  }
+
+  .table-base tr:hover td {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+
+  /* ── Stat card ────────────────────────────────── */
+  .stat-card {
+    @apply card p-5 flex flex-col gap-3;
+  }
+
+  /* ── Sidebar nav ──────────────────────────────── */
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400
+           hover:text-slate-100 transition-all duration-200 cursor-pointer;
+  }
+  .nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-item-active {
+    @apply nav-item text-brand-300 border;
+    background-color: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.2);
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-400 to-violet-400 bg-clip-text text-transparent;
+  }
+
+  .bg-grid {
+    background-image: linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .animate-in {
+    @apply animate-slide-up;
+  }
+}

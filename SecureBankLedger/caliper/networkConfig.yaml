@@ -1,0 +1,85 @@
+################################################################################
+# SecureBank Ledger — Hyperledger Caliper Network Config
+# 3 Organizations (Org1=BankOrg, Org2=InsuranceOrg, Org3=AuditOrg)
+# Fabric 2.5 | 3 Peers | 3 Orderers (Raft)
+################################################################################
+
+name: securebank-3org-network
+version: "2.0"
+mutual-tls: false
+
+caliper:
+  blockchain: fabric
+
+info:
+  Version: 2.5.0
+  Size: 3 Organizations
+  Orderer: Raft
+  Distribution: Single Host
+  StateDB: CouchDB
+
+channels:
+  - channelName: banking-channel
+    created: false
+    definition:
+      capabilities: []
+      consortium: BankConsortium
+      isMspBased: false
+      msps:
+        - BankOrgMSP
+        - InsuranceOrgMSP
+        - AuditOrgMSP
+      version: 0
+    chaincodes:
+      - id: account-cc
+        version: v1.0
+        sequence: 1
+      - id: transaction-cc
+        version: v1.0
+        sequence: 1
+      - id: audit-cc
+        version: v1.0
+        sequence: 1
+
+organizations:
+  # ─── Org1: BankOrg (Primary bank) ──────────────────────────────────────────
+  - mspid: BankOrgMSP
+    identities:
+      certificates:
+        - name: BankAdminUser
+          clientPrivateKey:
+            path: ../network/organizations/peerOrganizations/bank.com/users/Admin@bank.com/msp/keystore/priv_sk
+          clientSignedCert:
+            path: ../network/organizations/peerOrganizations/bank.com/users/Admin@bank.com/msp/signcerts/Admin@bank.com-cert.pem
+    connectionProfile:
+      path: ./profiles/BankOrg-connection.yaml
+      discover: true
+
+  # ─── Org2: InsuranceOrg (Partner org) ──────────────────────────────────────
+  - mspid: InsuranceOrgMSP
+    identities:
+      certificates:
+        - name: InsuranceAdminUser
+          clientPrivateKey:
+            path: ../network/organizations/peerOrganizations/insurance.com/users/Admin@insurance.com/msp/keystore/priv_sk
+          clientSignedCert:
+            path: ../network/organizations/peerOrganizations/insurance.com/users/Admin@insurance.com/msp/signcerts/Admin@insurance.com-cert.pem
+    connectionProfile:
+      path: ./profiles/InsuranceOrg-connection.yaml
+      discover: true
+
+  # ─── Org3: AuditOrg (Regulator/Auditor org) ────────────────────────────────
+  - mspid: AuditOrgMSP
+    identities:
+      certificates:
+        - name: AuditAdminUser
+          clientPrivateKey:
+            path: ../network/organizations/peerOrganizations/audit.com/users/Admin@audit.com/msp/keystore/priv_sk
+          clientSignedCert:
+            path: ../network/organizations/peerOrganizations/audit.com/users/Admin@audit.com/msp/signcerts/Admin@audit.com-cert.pem
+    connectionProfile:
+      path: ./profiles/AuditOrg-connection.yaml
+      discover: true
+
+workers:
+  number: 5

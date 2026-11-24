@@ -1,0 +1,16 @@
+{
+  "caseId": "case-21",
+  "caseNumber": 21,
+  "group": "C",
+  "description": "Group C | Registration=ALL, Transfer=ANY, LoanApproval=ALL",
+  "policies": {
+    "registration": "ALL",
+    "transfer": "ANY",
+    "loan": "ALL"
+  },
+  "fabricPolicies": {
+    "registration": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+    "transfer": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+    "loan": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "securebank-caliper",
+  "version": "1.0.0",
+  "description": "Hyperledger Caliper benchmark suite for SecureBank Ledger — 3 Orgs × 3 Tx Types × 25 Rounds",
+  "scripts": {
+    "seed": "node seed-accounts.js",
+    "bench:registration": "npx caliper launch manager --caliper-workspace . --caliper-networkconfig networkConfig.yaml --caliper-benchconfig benchmarks/bench-registration.yaml --caliper-flow-only-test",
+    "bench:query": "npx caliper launch manager --caliper-workspace . --caliper-networkconfig networkConfig.yaml --caliper-benchconfig benchmarks/bench-query.yaml --caliper-flow-only-test",
+    "bench:transfer": "npx caliper launch manager --caliper-workspace . --caliper-networkconfig networkConfig.yaml --caliper-benchconfig benchmarks/bench-transfer.yaml --caliper-flow-only-test",
+    "bench:all": "bash run-benchmarks.sh",
+    "cases:all": "bash run-all-cases.sh",
+    "cases:groupA": "bash run-all-cases.sh 1 9",
+    "cases:groupB": "bash run-all-cases.sh 10 18",
+    "cases:groupC": "bash run-all-cases.sh 19 27",
+    "case": "bash run-all-cases.sh",
+    "bind": "npx caliper bind --caliper-bind-sut fabric:2.4"
+  },
+  "devDependencies": {
+    "@hyperledger/caliper-cli": "^0.6.0",
+    "@hyperledger/caliper-fabric": "^0.6.0"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.10.3",
+    "@hyperledger/fabric-gateway": "^1.5.0"
+  }
+}

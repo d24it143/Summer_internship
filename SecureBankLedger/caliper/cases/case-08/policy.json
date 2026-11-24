@@ -1,0 +1,16 @@
+{
+  "caseId": "case-08",
+  "caseNumber": 8,
+  "group": "A",
+  "description": "Group A | Registration=ANY, Transfer=ALL, LoanApproval=MAJORITY",
+  "policies": {
+    "registration": "ANY",
+    "transfer": "ALL",
+    "loan": "MAJORITY"
+  },
+  "fabricPolicies": {
+    "registration": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+    "transfer": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+    "loan": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+  }
+}

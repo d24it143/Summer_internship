@@ -1,0 +1,88 @@
+################################################################################
+# SecureBank Ledger — Caliper Connection Profile: Org3 (AuditOrg)
+# peer0.audit.com:11051 | AuditOrgMSP
+################################################################################
+
+name: securebank-auditorg
+version: "1.0"
+client:
+  organization: AuditOrg
+  connection:
+    timeout:
+      peer:
+        endorser: "300"
+      orderer: "300"
+
+organizations:
+  AuditOrg:
+    mspid: AuditOrgMSP
+    peers:
+      - peer0.audit.com
+      - peer1.audit.com
+      - peer2.audit.com
+    certificateAuthorities:
+      - ca.audit.com
+
+peers:
+  peer0.audit.com:
+    url: grpcs://peer0.audit.com:11051
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/audit.com/peers/peer0.audit.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: peer0.audit.com
+      hostnameOverride: peer0.audit.com
+
+  peer1.audit.com:
+    url: grpcs://peer1.audit.com:11052
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/audit.com/peers/peer1.audit.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: peer1.audit.com
+      hostnameOverride: peer1.audit.com
+
+  peer2.audit.com:
+    url: grpcs://peer2.audit.com:11053
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/audit.com/peers/peer2.audit.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: peer2.audit.com
+      hostnameOverride: peer2.audit.com
+
+certificateAuthorities:
+  ca.audit.com:
+    url: https://ca.audit.com:9054
+    caName: ca.audit.com
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/audit.com/ca/ca.audit.com-cert.pem
+    httpOptions:
+      verify: false
+
+orderers:
+  orderer0.orderer.bank.com:
+    url: grpcs://orderer0.orderer.bank.com:7050
+    tlsCACerts:
+      path: ../../network/organizations/ordererOrganizations/orderer.bank.com/orderers/orderer0.orderer.bank.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: orderer0.orderer.bank.com
+      hostnameOverride: orderer0.orderer.bank.com
+
+channels:
+  banking-channel:
+    orderers:
+      - orderer0.orderer.bank.com
+    peers:
+      peer0.audit.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+      peer1.audit.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: false
+      peer2.audit.com:
+        endorsingPeer: true
+        chaincodeQuery: false
+        ledgerQuery: false
+        eventSource: false

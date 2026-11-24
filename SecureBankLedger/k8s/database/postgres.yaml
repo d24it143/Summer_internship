@@ -1,0 +1,139 @@
+################################################################################
+# SecureBank Ledger — k8s/database/postgres.yaml
+# PostgreSQL StatefulSet for off-chain cache
+################################################################################
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: securebank-postgres
+  namespace: securebank
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          env:
+            - name: POSTGRES_DB
+              value: securebank
+            - name: POSTGRES_USER
+              value: securebank
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: securebank-secrets
+                  key: postgres-password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "securebank"]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 20Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: securebank
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: ClusterIP
+---
+################################################################################
+# Secrets template (fill in base64-encoded values)
+################################################################################
+apiVersion: v1
+kind: Secret
+metadata:
+  name: securebank-secrets
+  namespace: securebank
+type: Opaque
+data:
+  # base64 -n "your_value" | pbcopy
+  database-url: CHANGE_ME_BASE64
+  jwt-secret: CHANGE_ME_BASE64
+  jwt-refresh-secret: CHANGE_ME_BASE64
+  postgres-password: CHANGE_ME_BASE64
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: securebank-config
+  namespace: securebank
+data:
+  fabric-channel: "banking-channel"
+  fabric-peer-endpoint: "peer0.bank.com:7051"
+  fabric-msp-id: "BankOrgMSP"
+  cors-origin: "https://securebank.yourdomain.com"
+---
+################################################################################
+# Ingress
+################################################################################
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: securebank-ingress
+  namespace: securebank
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/proxy-body-size: "1m"
+spec:
+  tls:
+    - hosts:
+        - api.securebank.yourdomain.com
+        - securebank.yourdomain.com
+      secretName: securebank-tls
+  rules:
+    - host: api.securebank.yourdomain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: securebank-backend
+                port:
+                  number: 4000
+    - host: securebank.yourdomain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: securebank-frontend
+                port:
+                  number: 3000

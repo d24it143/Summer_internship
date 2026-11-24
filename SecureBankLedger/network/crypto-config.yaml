@@ -1,0 +1,48 @@
+################################################################################
+# SecureBank Ledger — crypto-config.yaml (3 Organizations)
+# Hyperledger Fabric 2.5
+# Org1: BankOrg | Org2: InsuranceOrg | Org3: AuditOrg
+################################################################################
+
+OrdererOrgs:
+  - Name: Orderer
+    Domain: orderer.bank.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer0
+        SANS: [localhost]
+      - Hostname: orderer1
+        SANS: [localhost]
+      - Hostname: orderer2
+        SANS: [localhost]
+
+PeerOrgs:
+  # ── Org1: BankOrg ──────────────────────────────────────────────────────────
+  - Name: BankOrg
+    Domain: bank.com
+    EnableNodeOUs: true
+    Template:
+      Count: 3
+      SANS: [localhost]
+    Users:
+      Count: 5   # Admin + teller + loan_officer + auditor + customer
+
+  # ── Org2: InsuranceOrg ─────────────────────────────────────────────────────
+  - Name: InsuranceOrg
+    Domain: insurance.com
+    EnableNodeOUs: true
+    Template:
+      Count: 3
+      SANS: [localhost]
+    Users:
+      Count: 3   # Admin + agent + auditor
+
+  # ── Org3: AuditOrg ─────────────────────────────────────────────────────────
+  - Name: AuditOrg
+    Domain: audit.com
+    EnableNodeOUs: true
+    Template:
+      Count: 3
+      SANS: [localhost]
+    Users:
+      Count: 2   # Admin + auditor

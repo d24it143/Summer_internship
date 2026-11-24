@@ -1,0 +1,14 @@
+################################################################################
+# SecureBank Ledger — Root docker-compose.yaml
+# Convenience wrapper that delegates to network/docker-compose.yaml
+################################################################################
+
+version: '3.9'
+
+# The full stack is defined in network/docker-compose.yaml
+# Run from root: docker-compose up
+# Or navigate to network/ and use: docker-compose up
+
+# This file exists for convenience — it references the network file
+include:
+  - path: network/docker-compose.yaml

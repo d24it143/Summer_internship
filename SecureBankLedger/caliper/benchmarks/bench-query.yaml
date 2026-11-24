@@ -1,0 +1,314 @@
+################################################################################
+# SecureBank Ledger — Caliper Benchmark: QUERY
+# Organizations: Org1 (BankOrgMSP) | Org2 (InsuranceOrgMSP) | Org3 (AuditOrgMSP)
+# Transaction counts: 100, 200, 300 ... 2500 (step 100) — 25 rounds total
+# Description: Account Query — getAccount & getAccountsByCustomer (read-only evaluate) across 3 Organizations
+################################################################################
+
+test:
+  name: securebank-query-benchmark
+  description: >
+    Account Query — getAccount & getAccountsByCustomer (read-only evaluate) across 3 Organizations
+  workers:
+    number: 5
+  rounds:
+- label: QUERY_TXN_100
+  description: "query — 100 transactions across Org1 / Org2 / Org3"
+  txNumber: 100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_100
+      txCount: 100
+- label: QUERY_TXN_200
+  description: "query — 200 transactions across Org1 / Org2 / Org3"
+  txNumber: 200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_200
+      txCount: 200
+- label: QUERY_TXN_300
+  description: "query — 300 transactions across Org1 / Org2 / Org3"
+  txNumber: 300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_300
+      txCount: 300
+- label: QUERY_TXN_400
+  description: "query — 400 transactions across Org1 / Org2 / Org3"
+  txNumber: 400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_400
+      txCount: 400
+- label: QUERY_TXN_500
+  description: "query — 500 transactions across Org1 / Org2 / Org3"
+  txNumber: 500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_500
+      txCount: 500
+- label: QUERY_TXN_600
+  description: "query — 600 transactions across Org1 / Org2 / Org3"
+  txNumber: 600
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_600
+      txCount: 600
+- label: QUERY_TXN_700
+  description: "query — 700 transactions across Org1 / Org2 / Org3"
+  txNumber: 700
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_700
+      txCount: 700
+- label: QUERY_TXN_800
+  description: "query — 800 transactions across Org1 / Org2 / Org3"
+  txNumber: 800
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_800
+      txCount: 800
+- label: QUERY_TXN_900
+  description: "query — 900 transactions across Org1 / Org2 / Org3"
+  txNumber: 900
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_900
+      txCount: 900
+- label: QUERY_TXN_1000
+  description: "query — 1000 transactions across Org1 / Org2 / Org3"
+  txNumber: 1000
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_1000
+      txCount: 1000
+- label: QUERY_TXN_1100
+  description: "query — 1100 transactions across Org1 / Org2 / Org3"
+  txNumber: 1100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_1100
+      txCount: 1100
+- label: QUERY_TXN_1200
+  description: "query — 1200 transactions across Org1 / Org2 / Org3"
+  txNumber: 1200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_1200
+      txCount: 1200
+- label: QUERY_TXN_1300
+  description: "query — 1300 transactions across Org1 / Org2 / Org3"
+  txNumber: 1300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_1300
+      txCount: 1300
+- label: QUERY_TXN_1400
+  description: "query — 1400 transactions across Org1 / Org2 / Org3"
+  txNumber: 1400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_1400
+      txCount: 1400
+- label: QUERY_TXN_1500
+  description: "query — 1500 transactions across Org1 / Org2 / Org3"
+  txNumber: 1500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_1500
+      txCount: 1500
+- label: QUERY_TXN_1600
+  description: "query — 1600 transactions across Org1 / Org2 / Org3"
+  txNumber: 1600
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_1600
+      txCount: 1600
+- label: QUERY_TXN_1700
+  description: "query — 1700 transactions across Org1 / Org2 / Org3"
+  txNumber: 1700
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_1700
+      txCount: 1700
+- label: QUERY_TXN_1800
+  description: "query — 1800 transactions across Org1 / Org2 / Org3"
+  txNumber: 1800
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_1800
+      txCount: 1800
+- label: QUERY_TXN_1900
+  description: "query — 1900 transactions across Org1 / Org2 / Org3"
+  txNumber: 1900
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_1900
+      txCount: 1900
+- label: QUERY_TXN_2000
+  description: "query — 2000 transactions across Org1 / Org2 / Org3"
+  txNumber: 2000
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_2000
+      txCount: 2000
+- label: QUERY_TXN_2100
+  description: "query — 2100 transactions across Org1 / Org2 / Org3"
+  txNumber: 2100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_2100
+      txCount: 2100
+- label: QUERY_TXN_2200
+  description: "query — 2200 transactions across Org1 / Org2 / Org3"
+  txNumber: 2200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_2200
+      txCount: 2200
+- label: QUERY_TXN_2300
+  description: "query — 2300 transactions across Org1 / Org2 / Org3"
+  txNumber: 2300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_2300
+      txCount: 2300
+- label: QUERY_TXN_2400
+  description: "query — 2400 transactions across Org1 / Org2 / Org3"
+  txNumber: 2400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_2400
+      txCount: 2400
+- label: QUERY_TXN_2500
+  description: "query — 2500 transactions across Org1 / Org2 / Org3"
+  txNumber: 2500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: QUERY_TXN_2500
+      txCount: 2500
