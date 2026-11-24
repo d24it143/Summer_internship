@@ -1,0 +1,1064 @@
+################################################################################
+# SecureBank Ledger — Caliper Benchmark
+# CASE-07 | Group A | Registration=ANY, Transfer=ALL, LoanApproval=ANY
+# Rounds: 75  (3 tx types × 25 counts: 100→2500 step 100)
+# Organizations: Org1(BankOrg) | Org2(InsuranceOrg) | Org3(AuditOrg)
+################################################################################
+
+test:
+  name: "securebank-case-07"
+  description: >
+    Group A | Registration=ANY, Transfer=ALL, LoanApproval=ANY
+  workers:
+    number: 5
+  rounds:
+- label: "REGISTRATION_CASE-07_ANY_TXN_100"
+  description: "Registration | case-07 | Policy=ANY | Tx=100 | Orgs=Org1,Org2,Org3"
+  txNumber: 100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_100"
+      txCount: 100
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_200"
+  description: "Registration | case-07 | Policy=ANY | Tx=200 | Orgs=Org1,Org2,Org3"
+  txNumber: 200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_200"
+      txCount: 200
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_300"
+  description: "Registration | case-07 | Policy=ANY | Tx=300 | Orgs=Org1,Org2,Org3"
+  txNumber: 300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_300"
+      txCount: 300
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_400"
+  description: "Registration | case-07 | Policy=ANY | Tx=400 | Orgs=Org1,Org2,Org3"
+  txNumber: 400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_400"
+      txCount: 400
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_500"
+  description: "Registration | case-07 | Policy=ANY | Tx=500 | Orgs=Org1,Org2,Org3"
+  txNumber: 500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_500"
+      txCount: 500
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_600"
+  description: "Registration | case-07 | Policy=ANY | Tx=600 | Orgs=Org1,Org2,Org3"
+  txNumber: 600
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_600"
+      txCount: 600
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_700"
+  description: "Registration | case-07 | Policy=ANY | Tx=700 | Orgs=Org1,Org2,Org3"
+  txNumber: 700
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_700"
+      txCount: 700
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_800"
+  description: "Registration | case-07 | Policy=ANY | Tx=800 | Orgs=Org1,Org2,Org3"
+  txNumber: 800
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_800"
+      txCount: 800
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_900"
+  description: "Registration | case-07 | Policy=ANY | Tx=900 | Orgs=Org1,Org2,Org3"
+  txNumber: 900
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_900"
+      txCount: 900
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_1000"
+  description: "Registration | case-07 | Policy=ANY | Tx=1000 | Orgs=Org1,Org2,Org3"
+  txNumber: 1000
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_1000"
+      txCount: 1000
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_1100"
+  description: "Registration | case-07 | Policy=ANY | Tx=1100 | Orgs=Org1,Org2,Org3"
+  txNumber: 1100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_1100"
+      txCount: 1100
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_1200"
+  description: "Registration | case-07 | Policy=ANY | Tx=1200 | Orgs=Org1,Org2,Org3"
+  txNumber: 1200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_1200"
+      txCount: 1200
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_1300"
+  description: "Registration | case-07 | Policy=ANY | Tx=1300 | Orgs=Org1,Org2,Org3"
+  txNumber: 1300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_1300"
+      txCount: 1300
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_1400"
+  description: "Registration | case-07 | Policy=ANY | Tx=1400 | Orgs=Org1,Org2,Org3"
+  txNumber: 1400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_1400"
+      txCount: 1400
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_1500"
+  description: "Registration | case-07 | Policy=ANY | Tx=1500 | Orgs=Org1,Org2,Org3"
+  txNumber: 1500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_1500"
+      txCount: 1500
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_1600"
+  description: "Registration | case-07 | Policy=ANY | Tx=1600 | Orgs=Org1,Org2,Org3"
+  txNumber: 1600
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_1600"
+      txCount: 1600
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_1700"
+  description: "Registration | case-07 | Policy=ANY | Tx=1700 | Orgs=Org1,Org2,Org3"
+  txNumber: 1700
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_1700"
+      txCount: 1700
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_1800"
+  description: "Registration | case-07 | Policy=ANY | Tx=1800 | Orgs=Org1,Org2,Org3"
+  txNumber: 1800
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_1800"
+      txCount: 1800
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_1900"
+  description: "Registration | case-07 | Policy=ANY | Tx=1900 | Orgs=Org1,Org2,Org3"
+  txNumber: 1900
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_1900"
+      txCount: 1900
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_2000"
+  description: "Registration | case-07 | Policy=ANY | Tx=2000 | Orgs=Org1,Org2,Org3"
+  txNumber: 2000
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_2000"
+      txCount: 2000
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_2100"
+  description: "Registration | case-07 | Policy=ANY | Tx=2100 | Orgs=Org1,Org2,Org3"
+  txNumber: 2100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_2100"
+      txCount: 2100
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_2200"
+  description: "Registration | case-07 | Policy=ANY | Tx=2200 | Orgs=Org1,Org2,Org3"
+  txNumber: 2200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_2200"
+      txCount: 2200
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_2300"
+  description: "Registration | case-07 | Policy=ANY | Tx=2300 | Orgs=Org1,Org2,Org3"
+  txNumber: 2300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_2300"
+      txCount: 2300
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_2400"
+  description: "Registration | case-07 | Policy=ANY | Tx=2400 | Orgs=Org1,Org2,Org3"
+  txNumber: 2400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_2400"
+      txCount: 2400
+      policy: "ANY"
+      caseId: "case-07"
+- label: "REGISTRATION_CASE-07_ANY_TXN_2500"
+  description: "Registration | case-07 | Policy=ANY | Tx=2500 | Orgs=Org1,Org2,Org3"
+  txNumber: 2500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/registration.js
+    arguments:
+      roundLabel: "REGISTRATION_CASE-07_ANY_TXN_2500"
+      txCount: 2500
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_100"
+  description: "Query | case-07 | Policy=ANY | Tx=100 | Orgs=Org1,Org2,Org3"
+  txNumber: 100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_100"
+      txCount: 100
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_200"
+  description: "Query | case-07 | Policy=ANY | Tx=200 | Orgs=Org1,Org2,Org3"
+  txNumber: 200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_200"
+      txCount: 200
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_300"
+  description: "Query | case-07 | Policy=ANY | Tx=300 | Orgs=Org1,Org2,Org3"
+  txNumber: 300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_300"
+      txCount: 300
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_400"
+  description: "Query | case-07 | Policy=ANY | Tx=400 | Orgs=Org1,Org2,Org3"
+  txNumber: 400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_400"
+      txCount: 400
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_500"
+  description: "Query | case-07 | Policy=ANY | Tx=500 | Orgs=Org1,Org2,Org3"
+  txNumber: 500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_500"
+      txCount: 500
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_600"
+  description: "Query | case-07 | Policy=ANY | Tx=600 | Orgs=Org1,Org2,Org3"
+  txNumber: 600
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_600"
+      txCount: 600
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_700"
+  description: "Query | case-07 | Policy=ANY | Tx=700 | Orgs=Org1,Org2,Org3"
+  txNumber: 700
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_700"
+      txCount: 700
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_800"
+  description: "Query | case-07 | Policy=ANY | Tx=800 | Orgs=Org1,Org2,Org3"
+  txNumber: 800
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_800"
+      txCount: 800
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_900"
+  description: "Query | case-07 | Policy=ANY | Tx=900 | Orgs=Org1,Org2,Org3"
+  txNumber: 900
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_900"
+      txCount: 900
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_1000"
+  description: "Query | case-07 | Policy=ANY | Tx=1000 | Orgs=Org1,Org2,Org3"
+  txNumber: 1000
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_1000"
+      txCount: 1000
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_1100"
+  description: "Query | case-07 | Policy=ANY | Tx=1100 | Orgs=Org1,Org2,Org3"
+  txNumber: 1100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_1100"
+      txCount: 1100
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_1200"
+  description: "Query | case-07 | Policy=ANY | Tx=1200 | Orgs=Org1,Org2,Org3"
+  txNumber: 1200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_1200"
+      txCount: 1200
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_1300"
+  description: "Query | case-07 | Policy=ANY | Tx=1300 | Orgs=Org1,Org2,Org3"
+  txNumber: 1300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_1300"
+      txCount: 1300
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_1400"
+  description: "Query | case-07 | Policy=ANY | Tx=1400 | Orgs=Org1,Org2,Org3"
+  txNumber: 1400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_1400"
+      txCount: 1400
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_1500"
+  description: "Query | case-07 | Policy=ANY | Tx=1500 | Orgs=Org1,Org2,Org3"
+  txNumber: 1500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_1500"
+      txCount: 1500
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_1600"
+  description: "Query | case-07 | Policy=ANY | Tx=1600 | Orgs=Org1,Org2,Org3"
+  txNumber: 1600
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_1600"
+      txCount: 1600
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_1700"
+  description: "Query | case-07 | Policy=ANY | Tx=1700 | Orgs=Org1,Org2,Org3"
+  txNumber: 1700
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_1700"
+      txCount: 1700
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_1800"
+  description: "Query | case-07 | Policy=ANY | Tx=1800 | Orgs=Org1,Org2,Org3"
+  txNumber: 1800
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_1800"
+      txCount: 1800
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_1900"
+  description: "Query | case-07 | Policy=ANY | Tx=1900 | Orgs=Org1,Org2,Org3"
+  txNumber: 1900
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_1900"
+      txCount: 1900
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_2000"
+  description: "Query | case-07 | Policy=ANY | Tx=2000 | Orgs=Org1,Org2,Org3"
+  txNumber: 2000
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_2000"
+      txCount: 2000
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_2100"
+  description: "Query | case-07 | Policy=ANY | Tx=2100 | Orgs=Org1,Org2,Org3"
+  txNumber: 2100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_2100"
+      txCount: 2100
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_2200"
+  description: "Query | case-07 | Policy=ANY | Tx=2200 | Orgs=Org1,Org2,Org3"
+  txNumber: 2200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_2200"
+      txCount: 2200
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_2300"
+  description: "Query | case-07 | Policy=ANY | Tx=2300 | Orgs=Org1,Org2,Org3"
+  txNumber: 2300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_2300"
+      txCount: 2300
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_2400"
+  description: "Query | case-07 | Policy=ANY | Tx=2400 | Orgs=Org1,Org2,Org3"
+  txNumber: 2400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_2400"
+      txCount: 2400
+      policy: "ANY"
+      caseId: "case-07"
+- label: "QUERY_CASE-07_ANY_TXN_2500"
+  description: "Query | case-07 | Policy=ANY | Tx=2500 | Orgs=Org1,Org2,Org3"
+  txNumber: 2500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/query.js
+    arguments:
+      roundLabel: "QUERY_CASE-07_ANY_TXN_2500"
+      txCount: 2500
+      policy: "ANY"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_100"
+  description: "Transfer | case-07 | Policy=ALL | Tx=100 | Orgs=Org1,Org2,Org3"
+  txNumber: 100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_100"
+      txCount: 100
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_200"
+  description: "Transfer | case-07 | Policy=ALL | Tx=200 | Orgs=Org1,Org2,Org3"
+  txNumber: 200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_200"
+      txCount: 200
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_300"
+  description: "Transfer | case-07 | Policy=ALL | Tx=300 | Orgs=Org1,Org2,Org3"
+  txNumber: 300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_300"
+      txCount: 300
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_400"
+  description: "Transfer | case-07 | Policy=ALL | Tx=400 | Orgs=Org1,Org2,Org3"
+  txNumber: 400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_400"
+      txCount: 400
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_500"
+  description: "Transfer | case-07 | Policy=ALL | Tx=500 | Orgs=Org1,Org2,Org3"
+  txNumber: 500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_500"
+      txCount: 500
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_600"
+  description: "Transfer | case-07 | Policy=ALL | Tx=600 | Orgs=Org1,Org2,Org3"
+  txNumber: 600
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_600"
+      txCount: 600
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_700"
+  description: "Transfer | case-07 | Policy=ALL | Tx=700 | Orgs=Org1,Org2,Org3"
+  txNumber: 700
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_700"
+      txCount: 700
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_800"
+  description: "Transfer | case-07 | Policy=ALL | Tx=800 | Orgs=Org1,Org2,Org3"
+  txNumber: 800
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_800"
+      txCount: 800
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_900"
+  description: "Transfer | case-07 | Policy=ALL | Tx=900 | Orgs=Org1,Org2,Org3"
+  txNumber: 900
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_900"
+      txCount: 900
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_1000"
+  description: "Transfer | case-07 | Policy=ALL | Tx=1000 | Orgs=Org1,Org2,Org3"
+  txNumber: 1000
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_1000"
+      txCount: 1000
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_1100"
+  description: "Transfer | case-07 | Policy=ALL | Tx=1100 | Orgs=Org1,Org2,Org3"
+  txNumber: 1100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_1100"
+      txCount: 1100
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_1200"
+  description: "Transfer | case-07 | Policy=ALL | Tx=1200 | Orgs=Org1,Org2,Org3"
+  txNumber: 1200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_1200"
+      txCount: 1200
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_1300"
+  description: "Transfer | case-07 | Policy=ALL | Tx=1300 | Orgs=Org1,Org2,Org3"
+  txNumber: 1300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_1300"
+      txCount: 1300
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_1400"
+  description: "Transfer | case-07 | Policy=ALL | Tx=1400 | Orgs=Org1,Org2,Org3"
+  txNumber: 1400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_1400"
+      txCount: 1400
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_1500"
+  description: "Transfer | case-07 | Policy=ALL | Tx=1500 | Orgs=Org1,Org2,Org3"
+  txNumber: 1500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_1500"
+      txCount: 1500
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_1600"
+  description: "Transfer | case-07 | Policy=ALL | Tx=1600 | Orgs=Org1,Org2,Org3"
+  txNumber: 1600
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_1600"
+      txCount: 1600
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_1700"
+  description: "Transfer | case-07 | Policy=ALL | Tx=1700 | Orgs=Org1,Org2,Org3"
+  txNumber: 1700
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_1700"
+      txCount: 1700
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_1800"
+  description: "Transfer | case-07 | Policy=ALL | Tx=1800 | Orgs=Org1,Org2,Org3"
+  txNumber: 1800
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_1800"
+      txCount: 1800
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_1900"
+  description: "Transfer | case-07 | Policy=ALL | Tx=1900 | Orgs=Org1,Org2,Org3"
+  txNumber: 1900
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_1900"
+      txCount: 1900
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_2000"
+  description: "Transfer | case-07 | Policy=ALL | Tx=2000 | Orgs=Org1,Org2,Org3"
+  txNumber: 2000
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_2000"
+      txCount: 2000
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_2100"
+  description: "Transfer | case-07 | Policy=ALL | Tx=2100 | Orgs=Org1,Org2,Org3"
+  txNumber: 2100
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_2100"
+      txCount: 2100
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_2200"
+  description: "Transfer | case-07 | Policy=ALL | Tx=2200 | Orgs=Org1,Org2,Org3"
+  txNumber: 2200
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_2200"
+      txCount: 2200
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_2300"
+  description: "Transfer | case-07 | Policy=ALL | Tx=2300 | Orgs=Org1,Org2,Org3"
+  txNumber: 2300
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_2300"
+      txCount: 2300
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_2400"
+  description: "Transfer | case-07 | Policy=ALL | Tx=2400 | Orgs=Org1,Org2,Org3"
+  txNumber: 2400
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_2400"
+      txCount: 2400
+      policy: "ALL"
+      caseId: "case-07"
+- label: "TRANSFER_CASE-07_ALL_TXN_2500"
+  description: "Transfer | case-07 | Policy=ALL | Tx=2500 | Orgs=Org1,Org2,Org3"
+  txNumber: 2500
+  rateControl:
+    type: fixed-rate
+    opts:
+      tps: 50
+  workload:
+    module: ../workloads/transfer.js
+    arguments:
+      roundLabel: "TRANSFER_CASE-07_ALL_TXN_2500"
+      txCount: 2500
+      policy: "ALL"
+      caseId: "case-07"

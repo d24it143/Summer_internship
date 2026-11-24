@@ -1,0 +1,201 @@
+################################################################################
+# SecureBank Ledger — configtx.yaml (3 Organizations)
+# Hyperledger Fabric 2.5 | Genesis + Channel config
+# Org1: BankOrg | Org2: InsuranceOrg | Org3: AuditOrg
+################################################################################
+
+Organizations:
+  # ── Orderer ────────────────────────────────────────────────────────────────
+  - &OrdererOrg
+    Name: OrdererMSP
+    ID: OrdererMSP
+    MSPDir: organizations/ordererOrganizations/orderer.bank.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrdererMSP.admin')"
+    OrdererEndpoints:
+      - orderer0.orderer.bank.com:7050
+      - orderer1.orderer.bank.com:8050
+      - orderer2.orderer.bank.com:9050
+
+  # ── Org1: BankOrg ──────────────────────────────────────────────────────────
+  - &BankOrg
+    Name: BankOrgMSP
+    ID: BankOrgMSP
+    MSPDir: organizations/peerOrganizations/bank.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('BankOrgMSP.admin','BankOrgMSP.peer','BankOrgMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('BankOrgMSP.admin','BankOrgMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('BankOrgMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('BankOrgMSP.peer')"
+    AnchorPeers:
+      - Host: peer0.bank.com
+        Port: 7051
+
+  # ── Org2: InsuranceOrg ─────────────────────────────────────────────────────
+  - &InsuranceOrg
+    Name: InsuranceOrgMSP
+    ID: InsuranceOrgMSP
+    MSPDir: organizations/peerOrganizations/insurance.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('InsuranceOrgMSP.admin','InsuranceOrgMSP.peer','InsuranceOrgMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('InsuranceOrgMSP.admin','InsuranceOrgMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('InsuranceOrgMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('InsuranceOrgMSP.peer')"
+    AnchorPeers:
+      - Host: peer0.insurance.com
+        Port: 10051
+
+  # ── Org3: AuditOrg ─────────────────────────────────────────────────────────
+  - &AuditOrg
+    Name: AuditOrgMSP
+    ID: AuditOrgMSP
+    MSPDir: organizations/peerOrganizations/audit.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('AuditOrgMSP.admin','AuditOrgMSP.peer','AuditOrgMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('AuditOrgMSP.admin','AuditOrgMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('AuditOrgMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('AuditOrgMSP.peer')"
+    AnchorPeers:
+      - Host: peer0.audit.com
+        Port: 11051
+
+Capabilities:
+  Channel: &ChannelCapabilities
+    V2_0: true
+  Orderer: &OrdererCapabilities
+    V2_0: true
+  Application: &ApplicationCapabilities
+    V2_5: true
+
+Application: &ApplicationDefaults
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+  Capabilities:
+    <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+  OrdererType: etcdraft
+  Addresses:
+    - orderer0.orderer.bank.com:7050
+    - orderer1.orderer.bank.com:8050
+    - orderer2.orderer.bank.com:9050
+  EtcdRaft:
+    Consenters:
+      - Host: orderer0.orderer.bank.com
+        Port: 7050
+        ClientTLSCert: organizations/ordererOrganizations/orderer.bank.com/orderers/orderer0.orderer.bank.com/tls/server.crt
+        ServerTLSCert: organizations/ordererOrganizations/orderer.bank.com/orderers/orderer0.orderer.bank.com/tls/server.crt
+      - Host: orderer1.orderer.bank.com
+        Port: 8050
+        ClientTLSCert: organizations/ordererOrganizations/orderer.bank.com/orderers/orderer1.orderer.bank.com/tls/server.crt
+        ServerTLSCert: organizations/ordererOrganizations/orderer.bank.com/orderers/orderer1.orderer.bank.com/tls/server.crt
+      - Host: orderer2.orderer.bank.com
+        Port: 9050
+        ClientTLSCert: organizations/ordererOrganizations/orderer.bank.com/orderers/orderer2.orderer.bank.com/tls/server.crt
+        ServerTLSCert: organizations/ordererOrganizations/orderer.bank.com/orderers/orderer2.orderer.bank.com/tls/server.crt
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 500
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 2 MB
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+  Capabilities:
+    <<: *OrdererCapabilities
+
+Channel: &ChannelDefaults
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+Profiles:
+  BankOrdererGenesis:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+    Consortiums:
+      BankConsortium:
+        Organizations:
+          - *BankOrg
+          - *InsuranceOrg
+          - *AuditOrg
+
+  BankingChannel:
+    Consortium: BankConsortium
+    <<: *ChannelDefaults
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *BankOrg
+        - *InsuranceOrg
+        - *AuditOrg

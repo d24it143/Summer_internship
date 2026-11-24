@@ -1,0 +1,128 @@
+################################################################################
+# SecureBank Ledger — k8s/backend/deployment.yaml
+# Production Kubernetes deployment for Express API
+################################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: securebank-backend
+  namespace: securebank
+  labels:
+    app: securebank-backend
+    version: "1.0.0"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: securebank-backend
+  template:
+    metadata:
+      labels:
+        app: securebank-backend
+    spec:
+      serviceAccountName: securebank-backend
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+      containers:
+        - name: backend
+          image: securebank/backend:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4000
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "4000"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: securebank-secrets
+                  key: database-url
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: securebank-secrets
+                  key: jwt-secret
+            - name: JWT_REFRESH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: securebank-secrets
+                  key: jwt-refresh-secret
+            - name: FABRIC_CHANNEL
+              valueFrom:
+                configMapKeyRef:
+                  name: securebank-config
+                  key: fabric-channel
+            - name: FABRIC_PEER_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: securebank-config
+                  key: fabric-peer-endpoint
+            - name: FABRIC_MSP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: securebank-config
+                  key: fabric-msp-id
+            - name: CORS_ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  name: securebank-config
+                  key: cors-origin
+          volumeMounts:
+            - name: fabric-certs
+              mountPath: /fabric/organizations
+              readOnly: true
+            - name: fabric-wallet
+              mountPath: /fabric/wallet
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 4000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 4000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+      volumes:
+        - name: fabric-certs
+          secret:
+            secretName: fabric-org-certs
+        - name: fabric-wallet
+          persistentVolumeClaim:
+            claimName: fabric-wallet-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: securebank-backend
+  namespace: securebank
+spec:
+  selector:
+    app: securebank-backend
+  ports:
+    - port: 4000
+      targetPort: 4000
+      protocol: TCP
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: securebank-backend
+  namespace: securebank

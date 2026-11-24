@@ -1,0 +1,88 @@
+################################################################################
+# SecureBank Ledger — Caliper Connection Profile: Org2 (InsuranceOrg)
+# peer0.insurance.com:10051 | InsuranceOrgMSP
+################################################################################
+
+name: securebank-insuranceorg
+version: "1.0"
+client:
+  organization: InsuranceOrg
+  connection:
+    timeout:
+      peer:
+        endorser: "300"
+      orderer: "300"
+
+organizations:
+  InsuranceOrg:
+    mspid: InsuranceOrgMSP
+    peers:
+      - peer0.insurance.com
+      - peer1.insurance.com
+      - peer2.insurance.com
+    certificateAuthorities:
+      - ca.insurance.com
+
+peers:
+  peer0.insurance.com:
+    url: grpcs://peer0.insurance.com:10051
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/insurance.com/peers/peer0.insurance.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: peer0.insurance.com
+      hostnameOverride: peer0.insurance.com
+
+  peer1.insurance.com:
+    url: grpcs://peer1.insurance.com:10052
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/insurance.com/peers/peer1.insurance.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: peer1.insurance.com
+      hostnameOverride: peer1.insurance.com
+
+  peer2.insurance.com:
+    url: grpcs://peer2.insurance.com:10053
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/insurance.com/peers/peer2.insurance.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: peer2.insurance.com
+      hostnameOverride: peer2.insurance.com
+
+certificateAuthorities:
+  ca.insurance.com:
+    url: https://ca.insurance.com:8054
+    caName: ca.insurance.com
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/insurance.com/ca/ca.insurance.com-cert.pem
+    httpOptions:
+      verify: false
+
+orderers:
+  orderer0.orderer.bank.com:
+    url: grpcs://orderer0.orderer.bank.com:7050
+    tlsCACerts:
+      path: ../../network/organizations/ordererOrganizations/orderer.bank.com/orderers/orderer0.orderer.bank.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: orderer0.orderer.bank.com
+      hostnameOverride: orderer0.orderer.bank.com
+
+channels:
+  banking-channel:
+    orderers:
+      - orderer0.orderer.bank.com
+    peers:
+      peer0.insurance.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+      peer1.insurance.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: false
+      peer2.insurance.com:
+        endorsingPeer: true
+        chaincodeQuery: false
+        ledgerQuery: false
+        eventSource: false

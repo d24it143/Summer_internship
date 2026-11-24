@@ -1,0 +1,464 @@
+{
+  "totalCases": 27,
+  "txCounts": [
+    100,
+    200,
+    300,
+    400,
+    500,
+    600,
+    700,
+    800,
+    900,
+    1000,
+    1100,
+    1200,
+    1300,
+    1400,
+    1500,
+    1600,
+    1700,
+    1800,
+    1900,
+    2000,
+    2100,
+    2200,
+    2300,
+    2400,
+    2500
+  ],
+  "cases": [
+    {
+      "case": 1,
+      "caseId": "case-01",
+      "group": "A",
+      "policies": {
+        "registration": "ANY",
+        "transfer": "ANY",
+        "loan": "ANY"
+      },
+      "fabricPolicies": {
+        "registration": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group A | Registration=ANY, Transfer=ANY, LoanApproval=ANY"
+    },
+    {
+      "case": 2,
+      "caseId": "case-02",
+      "group": "A",
+      "policies": {
+        "registration": "ANY",
+        "transfer": "ANY",
+        "loan": "MAJORITY"
+      },
+      "fabricPolicies": {
+        "registration": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group A | Registration=ANY, Transfer=ANY, LoanApproval=MAJORITY"
+    },
+    {
+      "case": 3,
+      "caseId": "case-03",
+      "group": "A",
+      "policies": {
+        "registration": "ANY",
+        "transfer": "ANY",
+        "loan": "ALL"
+      },
+      "fabricPolicies": {
+        "registration": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group A | Registration=ANY, Transfer=ANY, LoanApproval=ALL"
+    },
+    {
+      "case": 4,
+      "caseId": "case-04",
+      "group": "A",
+      "policies": {
+        "registration": "ANY",
+        "transfer": "MAJORITY",
+        "loan": "ANY"
+      },
+      "fabricPolicies": {
+        "registration": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group A | Registration=ANY, Transfer=MAJORITY, LoanApproval=ANY"
+    },
+    {
+      "case": 5,
+      "caseId": "case-05",
+      "group": "A",
+      "policies": {
+        "registration": "ANY",
+        "transfer": "MAJORITY",
+        "loan": "MAJORITY"
+      },
+      "fabricPolicies": {
+        "registration": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group A | Registration=ANY, Transfer=MAJORITY, LoanApproval=MAJORITY"
+    },
+    {
+      "case": 6,
+      "caseId": "case-06",
+      "group": "A",
+      "policies": {
+        "registration": "ANY",
+        "transfer": "MAJORITY",
+        "loan": "ALL"
+      },
+      "fabricPolicies": {
+        "registration": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group A | Registration=ANY, Transfer=MAJORITY, LoanApproval=ALL"
+    },
+    {
+      "case": 7,
+      "caseId": "case-07",
+      "group": "A",
+      "policies": {
+        "registration": "ANY",
+        "transfer": "ALL",
+        "loan": "ANY"
+      },
+      "fabricPolicies": {
+        "registration": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group A | Registration=ANY, Transfer=ALL, LoanApproval=ANY"
+    },
+    {
+      "case": 8,
+      "caseId": "case-08",
+      "group": "A",
+      "policies": {
+        "registration": "ANY",
+        "transfer": "ALL",
+        "loan": "MAJORITY"
+      },
+      "fabricPolicies": {
+        "registration": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group A | Registration=ANY, Transfer=ALL, LoanApproval=MAJORITY"
+    },
+    {
+      "case": 9,
+      "caseId": "case-09",
+      "group": "A",
+      "policies": {
+        "registration": "ANY",
+        "transfer": "ALL",
+        "loan": "ALL"
+      },
+      "fabricPolicies": {
+        "registration": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group A | Registration=ANY, Transfer=ALL, LoanApproval=ALL"
+    },
+    {
+      "case": 10,
+      "caseId": "case-10",
+      "group": "B",
+      "policies": {
+        "registration": "MAJORITY",
+        "transfer": "ANY",
+        "loan": "ANY"
+      },
+      "fabricPolicies": {
+        "registration": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group B | Registration=MAJORITY, Transfer=ANY, LoanApproval=ANY"
+    },
+    {
+      "case": 11,
+      "caseId": "case-11",
+      "group": "B",
+      "policies": {
+        "registration": "MAJORITY",
+        "transfer": "ANY",
+        "loan": "MAJORITY"
+      },
+      "fabricPolicies": {
+        "registration": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group B | Registration=MAJORITY, Transfer=ANY, LoanApproval=MAJORITY"
+    },
+    {
+      "case": 12,
+      "caseId": "case-12",
+      "group": "B",
+      "policies": {
+        "registration": "MAJORITY",
+        "transfer": "ANY",
+        "loan": "ALL"
+      },
+      "fabricPolicies": {
+        "registration": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group B | Registration=MAJORITY, Transfer=ANY, LoanApproval=ALL"
+    },
+    {
+      "case": 13,
+      "caseId": "case-13",
+      "group": "B",
+      "policies": {
+        "registration": "MAJORITY",
+        "transfer": "MAJORITY",
+        "loan": "ANY"
+      },
+      "fabricPolicies": {
+        "registration": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group B | Registration=MAJORITY, Transfer=MAJORITY, LoanApproval=ANY"
+    },
+    {
+      "case": 14,
+      "caseId": "case-14",
+      "group": "B",
+      "policies": {
+        "registration": "MAJORITY",
+        "transfer": "MAJORITY",
+        "loan": "MAJORITY"
+      },
+      "fabricPolicies": {
+        "registration": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group B | Registration=MAJORITY, Transfer=MAJORITY, LoanApproval=MAJORITY"
+    },
+    {
+      "case": 15,
+      "caseId": "case-15",
+      "group": "B",
+      "policies": {
+        "registration": "MAJORITY",
+        "transfer": "MAJORITY",
+        "loan": "ALL"
+      },
+      "fabricPolicies": {
+        "registration": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group B | Registration=MAJORITY, Transfer=MAJORITY, LoanApproval=ALL"
+    },
+    {
+      "case": 16,
+      "caseId": "case-16",
+      "group": "B",
+      "policies": {
+        "registration": "MAJORITY",
+        "transfer": "ALL",
+        "loan": "ANY"
+      },
+      "fabricPolicies": {
+        "registration": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group B | Registration=MAJORITY, Transfer=ALL, LoanApproval=ANY"
+    },
+    {
+      "case": 17,
+      "caseId": "case-17",
+      "group": "B",
+      "policies": {
+        "registration": "MAJORITY",
+        "transfer": "ALL",
+        "loan": "MAJORITY"
+      },
+      "fabricPolicies": {
+        "registration": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group B | Registration=MAJORITY, Transfer=ALL, LoanApproval=MAJORITY"
+    },
+    {
+      "case": 18,
+      "caseId": "case-18",
+      "group": "B",
+      "policies": {
+        "registration": "MAJORITY",
+        "transfer": "ALL",
+        "loan": "ALL"
+      },
+      "fabricPolicies": {
+        "registration": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group B | Registration=MAJORITY, Transfer=ALL, LoanApproval=ALL"
+    },
+    {
+      "case": 19,
+      "caseId": "case-19",
+      "group": "C",
+      "policies": {
+        "registration": "ALL",
+        "transfer": "ANY",
+        "loan": "ANY"
+      },
+      "fabricPolicies": {
+        "registration": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group C | Registration=ALL, Transfer=ANY, LoanApproval=ANY"
+    },
+    {
+      "case": 20,
+      "caseId": "case-20",
+      "group": "C",
+      "policies": {
+        "registration": "ALL",
+        "transfer": "ANY",
+        "loan": "MAJORITY"
+      },
+      "fabricPolicies": {
+        "registration": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group C | Registration=ALL, Transfer=ANY, LoanApproval=MAJORITY"
+    },
+    {
+      "case": 21,
+      "caseId": "case-21",
+      "group": "C",
+      "policies": {
+        "registration": "ALL",
+        "transfer": "ANY",
+        "loan": "ALL"
+      },
+      "fabricPolicies": {
+        "registration": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group C | Registration=ALL, Transfer=ANY, LoanApproval=ALL"
+    },
+    {
+      "case": 22,
+      "caseId": "case-22",
+      "group": "C",
+      "policies": {
+        "registration": "ALL",
+        "transfer": "MAJORITY",
+        "loan": "ANY"
+      },
+      "fabricPolicies": {
+        "registration": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group C | Registration=ALL, Transfer=MAJORITY, LoanApproval=ANY"
+    },
+    {
+      "case": 23,
+      "caseId": "case-23",
+      "group": "C",
+      "policies": {
+        "registration": "ALL",
+        "transfer": "MAJORITY",
+        "loan": "MAJORITY"
+      },
+      "fabricPolicies": {
+        "registration": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group C | Registration=ALL, Transfer=MAJORITY, LoanApproval=MAJORITY"
+    },
+    {
+      "case": 24,
+      "caseId": "case-24",
+      "group": "C",
+      "policies": {
+        "registration": "ALL",
+        "transfer": "MAJORITY",
+        "loan": "ALL"
+      },
+      "fabricPolicies": {
+        "registration": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group C | Registration=ALL, Transfer=MAJORITY, LoanApproval=ALL"
+    },
+    {
+      "case": 25,
+      "caseId": "case-25",
+      "group": "C",
+      "policies": {
+        "registration": "ALL",
+        "transfer": "ALL",
+        "loan": "ANY"
+      },
+      "fabricPolicies": {
+        "registration": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OR('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group C | Registration=ALL, Transfer=ALL, LoanApproval=ANY"
+    },
+    {
+      "case": 26,
+      "caseId": "case-26",
+      "group": "C",
+      "policies": {
+        "registration": "ALL",
+        "transfer": "ALL",
+        "loan": "MAJORITY"
+      },
+      "fabricPolicies": {
+        "registration": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "OutOf(2,'BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group C | Registration=ALL, Transfer=ALL, LoanApproval=MAJORITY"
+    },
+    {
+      "case": 27,
+      "caseId": "case-27",
+      "group": "C",
+      "policies": {
+        "registration": "ALL",
+        "transfer": "ALL",
+        "loan": "ALL"
+      },
+      "fabricPolicies": {
+        "registration": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "transfer": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')",
+        "loan": "AND('BankOrgMSP.peer','InsuranceOrgMSP.peer','AuditOrgMSP.peer')"
+      },
+      "description": "Group C | Registration=ALL, Transfer=ALL, LoanApproval=ALL"
+    }
+  ]
+}

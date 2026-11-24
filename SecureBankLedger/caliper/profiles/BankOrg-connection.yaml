@@ -1,0 +1,88 @@
+################################################################################
+# SecureBank Ledger — Caliper Connection Profile: Org1 (BankOrg)
+# peer0.bank.com:7051 | BankOrgMSP
+################################################################################
+
+name: securebank-bankorg
+version: "1.0"
+client:
+  organization: BankOrg
+  connection:
+    timeout:
+      peer:
+        endorser: "300"
+      orderer: "300"
+
+organizations:
+  BankOrg:
+    mspid: BankOrgMSP
+    peers:
+      - peer0.bank.com
+      - peer1.bank.com
+      - peer2.bank.com
+    certificateAuthorities:
+      - ca.bank.com
+
+peers:
+  peer0.bank.com:
+    url: grpcs://peer0.bank.com:7051
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/bank.com/peers/peer0.bank.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: peer0.bank.com
+      hostnameOverride: peer0.bank.com
+
+  peer1.bank.com:
+    url: grpcs://peer1.bank.com:8051
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/bank.com/peers/peer1.bank.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: peer1.bank.com
+      hostnameOverride: peer1.bank.com
+
+  peer2.bank.com:
+    url: grpcs://peer2.bank.com:9051
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/bank.com/peers/peer2.bank.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: peer2.bank.com
+      hostnameOverride: peer2.bank.com
+
+certificateAuthorities:
+  ca.bank.com:
+    url: https://ca.bank.com:7054
+    caName: ca.bank.com
+    tlsCACerts:
+      path: ../../network/organizations/peerOrganizations/bank.com/ca/ca.bank.com-cert.pem
+    httpOptions:
+      verify: false
+
+orderers:
+  orderer0.orderer.bank.com:
+    url: grpcs://orderer0.orderer.bank.com:7050
+    tlsCACerts:
+      path: ../../network/organizations/ordererOrganizations/orderer.bank.com/orderers/orderer0.orderer.bank.com/tls/ca.crt
+    grpcOptions:
+      ssl-target-name-override: orderer0.orderer.bank.com
+      hostnameOverride: orderer0.orderer.bank.com
+
+channels:
+  banking-channel:
+    orderers:
+      - orderer0.orderer.bank.com
+    peers:
+      peer0.bank.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+      peer1.bank.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: false
+      peer2.bank.com:
+        endorsingPeer: true
+        chaincodeQuery: false
+        ledgerQuery: false
+        eventSource: false
